@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import ProgressComponent from '$lib/components/ProgressComponent.svelte';
 
@@ -22,11 +23,11 @@
   onDestroy(() => clearInterval(proofInterval));
 
   function handleUpiPay(app: string) {
-    goto('/payment/success');
+    goto(`${base}/payment/success`);
   }
 
   function handleAddBank() {
-    goto('/payment/add-bank');
+    goto(`${base}/payment/add-bank`);
   }
 </script>
 
@@ -38,7 +39,7 @@
   <div class="header-area">
     <StatusBar />
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto('/fd')}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/fd`)}>
         <i class="ph ph-caret-left"></i>
       </button>
       <div class="icon-group">

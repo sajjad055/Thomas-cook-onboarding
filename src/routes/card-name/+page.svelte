@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { tweened } from 'svelte/motion';
@@ -35,7 +36,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto('/personal-details');
+    goto(`${base}/personal-details`);
   }
 </script>
 

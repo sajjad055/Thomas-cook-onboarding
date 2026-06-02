@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import ProgressComponent from '$lib/components/ProgressComponent.svelte';
   import TextField from '$lib/components/TextField.svelte';
@@ -45,7 +46,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto('/income');
+    goto(`${base}/income`);
   }
 </script>
 
@@ -57,7 +58,7 @@
   <div class="header-area">
     <StatusBar />
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto('/card-name')}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/card-name`)}>
         <i class="ph ph-caret-left"></i>
       </button>
       <div class="icon-group">

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import { browser } from '$app/environment';
@@ -21,7 +22,7 @@
 
     setTimeout(() => showReceipt = true, 1600);
     setTimeout(() => showNote = true, 2200);
-    setTimeout(() => goto('/card-name'), 4200);
+    setTimeout(() => goto(`${base}/card-name`), 4200);
   });
 
   const now = new Date();

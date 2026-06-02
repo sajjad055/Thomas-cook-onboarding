@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { fade } from 'svelte/transition';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import { onMount, onDestroy } from 'svelte';
@@ -70,7 +71,7 @@
     error = '';
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto('/aadhaar');
+    goto(`${base}/aadhaar`);
   }
 
   function handleResend() {
@@ -92,7 +93,7 @@
 
     <!-- Back | headset_mic + close -->
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto('/mobile')}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/mobile`)}>
         <i class="ph ph-caret-left"></i>
       </button>
       <div class="icon-group">

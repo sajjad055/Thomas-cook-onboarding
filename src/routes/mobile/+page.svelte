@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { fade } from 'svelte/transition';
   import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
@@ -39,7 +40,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto('/mobile/otp');
+    goto(`${base}/mobile/otp`);
   }
 </script>
 
@@ -55,7 +56,7 @@
     <div class="icon-row">
     <!-- Back | headset_mic + close -->
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto('/existing-customer')}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/existing-customer`)}>
         <i class="ph ph-caret-left"></i>
       </button>
       <div class="icon-group">

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
 
   let selected = $state<'etb' | 'ntb' | null>(null);
@@ -10,7 +11,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 500));
     loading = false;
-    goto('/mobile');
+    goto(`${base}/mobile`);
   }
 </script>
 
