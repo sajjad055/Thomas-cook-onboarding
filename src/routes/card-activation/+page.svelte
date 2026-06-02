@@ -78,7 +78,7 @@
     <div class="icon-row">
       <div class="icon-spacer"></div>
       <button class="icon-btn" aria-label="Help">
-        <i class="ph-duotone ph-headset" style="font-size:24px"></i>
+        <i class="ph-duotone ph-headset" style="font-size:24px; color:#111827"></i>
       </button>
     </div>
   </div>
