@@ -3,6 +3,7 @@
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
 
   // Phase 1: Card centered → Phase 2: Card moves up, content reveals

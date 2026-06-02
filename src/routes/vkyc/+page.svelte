@@ -558,7 +558,7 @@
 
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    padding: 20px 16px;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
     background: #FFFCF4;
     flex-shrink: 0;
     display: flex;

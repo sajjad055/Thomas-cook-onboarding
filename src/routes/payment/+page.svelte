@@ -10,7 +10,7 @@
 
   const proofs = [
     { type: 'icon', icon: 'ph-users', text: '500 customers booked FDs in the last 5 days.' },
-    { type: 'img', src: '/upi.svg', text: '90% of payments are completed via UPI instantly.' },
+    { type: 'img', src: `${base}/upi.svg`, text: '90% of payments are completed via UPI instantly.' },
   ];
 
   let proofInterval: ReturnType<typeof setInterval>;

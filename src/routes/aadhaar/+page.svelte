@@ -84,7 +84,7 @@
         <!-- Tricolor border overlay (visible when complete) -->
         <div class="tricolor-border" class:active={isValid}></div>
         <img
-          src="/aadhaar-front.svg"
+          src="{base}/aadhaar-front.svg"
           alt="Aadhaar card"
           class="kyc-bg"
           draggable="false"
@@ -379,8 +379,9 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 20px 0 16px;
+    padding: 20px 0 calc(16px + env(safe-area-inset-bottom));
     flex-shrink: 0;
+    background: #FFFCF4;
   }
 
   /* Consent */
