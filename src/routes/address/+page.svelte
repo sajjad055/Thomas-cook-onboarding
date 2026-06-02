@@ -49,7 +49,7 @@
   }
 </script>
 
-<svelte:head><title>Communication address – DCB</title></svelte:head>
+<svelte:head><title>Communication address – IOB</title></svelte:head>
 
 <div class="screen">
 

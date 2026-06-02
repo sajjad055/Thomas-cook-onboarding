@@ -30,7 +30,7 @@
   }
 </script>
 
-<svelte:head><title>Make a payment – DCB</title></svelte:head>
+<svelte:head><title>Make a payment – IOB</title></svelte:head>
 
 <div class="screen">
 

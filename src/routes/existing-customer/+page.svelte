@@ -15,7 +15,7 @@
   }
 </script>
 
-<svelte:head><title>Are you a DCB customer? – DCB</title></svelte:head>
+<svelte:head><title>Are you a IOB customer? – IOB</title></svelte:head>
 
 <div class="screen">
 
@@ -34,7 +34,7 @@
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar-wrapper">
-          <h1 class="screen-title">Are you already a customer of DCB bank?</h1>
+          <h1 class="screen-title">Are you already a customer of IOB Bank?</h1>
         </div>
       </div>
     </div>
@@ -62,9 +62,9 @@
               {/if}
             </div>
             <div class="card-text">
-              <span class="card-title">I am a customer of DCB bank</span>
+              <span class="card-title">I am a customer of IOB Bank</span>
               <p class="card-desc">
-                You can be our customer through any other finanical partner or directly with DCB bank
+                You can be our customer through any other finanical partner or directly with IOB Bank
               </p>
             </div>
           </div>
@@ -117,7 +117,7 @@
               </div>
               <div class="toast-text-col">
                 <p class="toast-msg toast-msg-blue">
-                  Glad you chose DCB bank for your credit card
+                  Glad you chose IOB Bank for your credit card
                 </p>
               </div>
             </div>

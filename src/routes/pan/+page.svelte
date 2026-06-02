@@ -40,7 +40,7 @@
   }
 </script>
 
-<svelte:head><title>Enter PAN details – DCB</title></svelte:head>
+<svelte:head><title>Enter PAN details – IOB</title></svelte:head>
 
 <div class="screen">
 
@@ -124,7 +124,7 @@
       </button>
       <div class="consent-text-wrap">
         <p class="consent-body">
-          I hereby authorize DCB Bank (India) Ltd. ("Bank") to fetch/retrieve my Know Your Customer..
+          I hereby authorize IOB Bank (India) Ltd. ("Bank") to fetch/retrieve my Know Your Customer..
           <button class="read-more" onclick={() => {}}>Read more</button>
         </p>
       </div>

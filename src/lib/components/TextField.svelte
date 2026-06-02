@@ -113,7 +113,7 @@
     cursor: text;
     transition: border-color 0.15s ease;
   }
-  .tf.focused { border-color: #242A80; }
+  .tf.focused { border-color: #D1D5DB; }
   .tf.error   { border-color: #B91C1C; }
   .tf.disabled { opacity: 0.5; cursor: not-allowed; }
 

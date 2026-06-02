@@ -1,1 +1,1 @@
-<svelte:head><title>DCB Credit Card</title></svelte:head>
+<svelte:head><title>IOB Credit Card</title></svelte:head>

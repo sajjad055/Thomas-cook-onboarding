@@ -47,7 +47,7 @@
   });
 </script>
 
-<svelte:head><title>Getting your card ready – DCB</title></svelte:head>
+<svelte:head><title>Getting your card ready – IOB</title></svelte:head>
 
 <div class="screen">
 
@@ -57,7 +57,7 @@
   <!-- Rotating bg lighting — moves with the card -->
   <div class="bg-card-group" class:centered={phase === 'intro'} class:settled={phase === 'reveal'}>
     <img src="/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
-    <img src="/dcb-payless-card.svg" alt="DCB Payless Card" class="card-img" draggable="false" />
+    <img src="/dcb-payless-card.svg" alt="IOB Payless Card" class="card-img" draggable="false" />
   </div>
 
   <!-- Confetti burst during intro -->

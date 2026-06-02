@@ -83,7 +83,7 @@
   }
 </script>
 
-<svelte:head><title>Enter OTP – DCB</title></svelte:head>
+<svelte:head><title>Enter OTP – IOB</title></svelte:head>
 
 <div class="screen">
 
@@ -279,8 +279,8 @@
   /* OTP box — fill width equally, h:48px, no fill, border:#D1D5DB, radius:8px */
   .otp-box {
     flex: 1;
-    height: 48px;
-    background: transparent;
+    height: 52px;
+    background: #FFFFFF;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     display: flex;
@@ -289,8 +289,8 @@
     transition: border-color 0.15s;
   }
   .otp-box.filled {
-    background: transparent;
-    border-color: #6F43C0;
+    background: #FFFFFF;
+    border-color: #D1D5DB;
   }
   .otp-box.has-error { border-color: #B91C1C; }
 
@@ -337,7 +337,7 @@
   }
 
   .resend-link {
-    color: #6F43C0;
+    color: #184595;
     font-weight: 600;
     text-decoration: underline;
   }

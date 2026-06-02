@@ -38,7 +38,7 @@
   });
 </script>
 
-<svelte:head><title>Payment successful – DCB</title></svelte:head>
+<svelte:head><title>Payment successful – IOB</title></svelte:head>
 
 <div class="screen">
   <StatusBar />

@@ -43,7 +43,7 @@
   }
 </script>
 
-<svelte:head><title>Select FD & set limit – DCB</title></svelte:head>
+<svelte:head><title>Select FD & set limit – IOB</title></svelte:head>
 
 <div class="screen">
 
@@ -73,7 +73,7 @@
       <div class="fd-top">
         <div class="fd-badge-row">
           <div class="fd-badge">
-            <span class="fd-badge-text">DCB payless card limit</span>
+            <span class="fd-badge-text">IOB payless card limit</span>
           </div>
         </div>
         <div class="fd-amount-row">

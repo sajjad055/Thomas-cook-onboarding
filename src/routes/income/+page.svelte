@@ -84,7 +84,7 @@
   }
 </script>
 
-<svelte:head><title>Income details – DCB</title></svelte:head>
+<svelte:head><title>Income details – IOB</title></svelte:head>
 
 <div class="screen">
 

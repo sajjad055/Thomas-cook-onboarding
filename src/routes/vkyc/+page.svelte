@@ -47,7 +47,7 @@
   }
 </script>
 
-<svelte:head><title>Complete video KYC – DCB</title></svelte:head>
+<svelte:head><title>Complete video KYC – IOB</title></svelte:head>
 
 <div class="screen">
 

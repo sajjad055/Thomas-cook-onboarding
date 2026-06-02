@@ -40,7 +40,7 @@
   }
 </script>
 
-<svelte:head><title>Name on card – DCB</title></svelte:head>
+<svelte:head><title>Name on card – IOB</title></svelte:head>
 
 <div class="screen">
   <StatusBar />
@@ -53,7 +53,7 @@
     <!-- Card with name overlay -->
     {#if showCard}
       <div class="card-wrap" in:fly={{ y: 40, duration: 500, easing: cubicOut }}>
-        <img src="/dcb-card-updated.svg" alt="DCB Payless Card" class="card-img" draggable="false" />
+        <img src="/dcb-card-updated.svg" alt="IOB Payless Card" class="card-img" draggable="false" />
         <!-- Name overlay on card -->
         <span class="card-name">{selectedName.toUpperCase()}</span>
       </div>
@@ -66,7 +66,7 @@
     <!-- Heading -->
     {#if showHeading}
       <p class="heading-text" in:fade={{ duration: 350 }}>
-        Great! You are one more step closer<br/>to your DCB credit card
+        Great! You are one more step closer<br/>to your IOB credit card
       </p>
     {/if}
 

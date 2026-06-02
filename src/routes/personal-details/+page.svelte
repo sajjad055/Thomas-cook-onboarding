@@ -49,7 +49,7 @@
   }
 </script>
 
-<svelte:head><title>Personal details – DCB</title></svelte:head>
+<svelte:head><title>Personal details – IOB</title></svelte:head>
 
 <div class="screen">
 
