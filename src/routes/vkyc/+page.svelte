@@ -3,7 +3,6 @@
   import { base } from '$app/paths';
   import { onMount, onDestroy } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
   import BottomSheet from '$lib/components/BottomSheet.svelte';
   import ShimmerText from '$lib/effects/ShimmerText.svelte';
 
@@ -67,7 +66,6 @@
     </div>
     <div class="progress-row">
       <h1 class="screen-title">Complete video KYC</h1>
-      <ProgressComponent step={19} totalSteps={20} />
     </div>
   </div>
 
@@ -212,12 +210,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -236,7 +234,7 @@
 
   .progress-row {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding: 0 16px; gap: 16px;
+    padding: 40px 16px 0 16px; gap: 16px;
   }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
@@ -260,7 +258,7 @@
     padding: 0 12px 16px;
     border: 0.5px solid #D1D5DB;
     border-radius: 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Highlight row ── */
@@ -348,7 +346,7 @@
   .timer-block {
     width: 17px;
     height: 24px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 2px;
     display: flex;
     align-items: center;
@@ -512,14 +510,14 @@
     gap: 16px;
     padding: 10px 12px;
     width: 100%;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s;
   }
-  .faq-item:active { background: #FFFDF6; }
+  .faq-item:active { background: #FFFCF4; }
 
   .faq-text {
     font-family: 'Nunito Sans', sans-serif;
@@ -543,7 +541,7 @@
     flex-direction: column;
     gap: 12px;
     padding: 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 12px;
   }
 
@@ -561,7 +559,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 20px 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;

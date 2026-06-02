@@ -3,7 +3,6 @@
   import { base } from '$app/paths';
   import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
 
   let aadhaar = $state('');
   let agreed = $state(false);
@@ -68,7 +67,6 @@
 
     <div class="progress-row">
       <h1 class="screen-title">Enter Aadhaar number</h1>
-      <ProgressComponent step={2} totalSteps={9} />
     </div>
   </div>
 
@@ -164,12 +162,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -203,7 +201,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 40px 16px 0 16px;
     gap: 10px;
   }
 

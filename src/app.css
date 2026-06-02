@@ -19,8 +19,8 @@
   --color-text-dark87: #212121;
 
   /* ---- Surface Colors ---- */
-  --color-white: #FFFDF6;
-  --color-surface: #FFFDF6;
+  --color-white: #FFFCF4;
+  --color-surface: #FFFCF4;
   --color-surface-alt: #F3F4F6;
   --color-border: #D1D5DB;
   --color-border-light: #E5E7EB;
@@ -222,7 +222,7 @@ body {
 /* Input fields */
 .input-field {
   width: 100%;
-  background: transparent;
+  background: #FFFFFF;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 10px 12px;

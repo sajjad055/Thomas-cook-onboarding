@@ -105,7 +105,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: transparent;
+    background: #FFFFFF;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     padding: 10px 12px;

@@ -124,7 +124,7 @@
     left: 0;
     right: 0;
     width: 100%;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 16px 16px 0 0;
     z-index: 101;
     display: flex;
@@ -187,7 +187,7 @@
 
   /* ── Footer slot ── */
   .sheet-footer {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding: 20px 16px;
     flex-shrink: 0;
     display: flex;

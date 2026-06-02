@@ -3,7 +3,6 @@
   import { base } from '$app/paths';
   import { tick } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
   import BottomSheet from '$lib/components/BottomSheet.svelte';
 
   // Field values
@@ -104,7 +103,6 @@
     </div>
     <div class="progress-row">
       <h1 class="screen-title">Enter income details</h1>
-      <ProgressComponent step={7} totalSteps={9} />
     </div>
   </div>
 
@@ -266,12 +264,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -290,7 +288,7 @@
 
   .progress-row {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding: 0 16px; gap: 16px;
+    padding: 40px 16px 0 16px; gap: 16px;
   }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
@@ -311,7 +309,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     padding: 10px 12px;
@@ -321,7 +319,7 @@
   }
   .dropdown-field.active {
     border-color: #242A80;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
   .dropdown-field.disabled {
     opacity: 0.5;
@@ -363,7 +361,7 @@
   .option-list {
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid #F3F4F6;
@@ -374,14 +372,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: none;
     cursor: pointer;
     text-align: left;
     width: 100%;
     transition: background 0.12s;
   }
-  .option-item:active { background: #FFFDF6; }
+  .option-item:active { background: #FFFCF4; }
 
   .option-text {
     font-family: 'Nunito Sans', sans-serif;
@@ -401,7 +399,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     transition: border-color 0.15s;
   }
   .option-radio.checked { border: none; background: none; }
@@ -428,7 +426,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 

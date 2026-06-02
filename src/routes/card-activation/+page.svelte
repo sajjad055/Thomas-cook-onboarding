@@ -190,7 +190,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #FFFDF6;
+    background: #FFFCF4;
     position: relative;
     overflow: hidden;
   }
@@ -311,7 +311,7 @@
   }
 
   .steps-card {
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 8px;
     padding: 44px 12px 16px;
     display: flex;

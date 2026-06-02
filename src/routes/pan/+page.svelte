@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
   import TextField from '$lib/components/TextField.svelte';
 
   let pan = $state('');
@@ -63,7 +62,6 @@
         <img src="/pan-illustration.svg" alt="" class="pan-illustration" width="42" height="30" draggable="false" />
         <h1 class="screen-title">Enter PAN details</h1>
       </div>
-      <ProgressComponent step={3} totalSteps={9} />
     </div>
   </div>
 
@@ -146,11 +144,11 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -167,7 +165,7 @@
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
 
-  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 16px; gap: 16px; }
+  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 40px 16px 0 16px; gap: 16px; }
   .title-with-illustration { display: flex; align-items: flex-end; gap: 8px; flex: 1; }
   .pan-illustration { flex-shrink: 0; user-select: none; pointer-events: none; }
   .screen-title {

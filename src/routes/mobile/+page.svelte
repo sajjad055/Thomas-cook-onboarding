@@ -4,7 +4,6 @@
   import { fade } from 'svelte/transition';
   import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
 
   let mobile = $state('');
   let touched = $state(false);
@@ -69,8 +68,7 @@
 
     <!-- Progress row: title + ring -->
     <div class="progress-row">
-      <h1 class="screen-title">Your mobile number</h1>
-      <ProgressComponent step={1} totalSteps={9} />
+      <h1 class="screen-title">Verify your mobile number</h1>
     </div>
   </div>
 
@@ -152,13 +150,13 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
     position: relative;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -197,7 +195,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 40px 16px 0 16px;
     gap: 16px;
   }
 
@@ -213,7 +211,7 @@
 
   /* ── Form ── */
   .form-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 16px 16px 0 0;
     padding: 20px 0 0;
     flex-shrink: 0;
@@ -237,7 +235,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: transparent;
+    background: #FFFFFF;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     padding: 10px 12px;
@@ -329,7 +327,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 16px 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 

@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
 
   import { onMount, onDestroy } from 'svelte';
 
@@ -52,7 +51,6 @@
       <div class="title-col">
         <h1 class="screen-title">Make a payment</h1>
       </div>
-      <ProgressComponent step={5} totalSteps={9} />
     </div>
   </div>
 
@@ -150,12 +148,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -170,7 +168,7 @@
     cursor: pointer; border-radius: 50%; transition: background 0.15s;
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
-  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 16px; gap: 16px; }
+  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 40px 16px 0 16px; gap: 16px; }
   .title-col { display: flex; flex-direction: column; gap: 3px; flex: 1; }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
@@ -260,11 +258,11 @@
     align-items: center;
     gap: 8px;
     padding: 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     cursor: pointer;
     transition: background 0.1s;
   }
-  .list-item:active { background: #FFFDF6; }
+  .list-item:active { background: #FFFCF4; }
 
   .list-icon {
     width: 36px;
@@ -282,9 +280,9 @@
     height: 100%;
     object-fit: contain;
   }
-  .list-icon.gpay { background: #FFFDF6; }
+  .list-icon.gpay { background: #FFFCF4; }
   .list-icon.phonepe { background: #F3EEFA; }
-  .list-icon.bank-icon { background: #FFFDF6; border-radius: 100px; }
+  .list-icon.bank-icon { background: #FFFCF4; border-radius: 100px; }
 
   .list-text {
     display: flex;

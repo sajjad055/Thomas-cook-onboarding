@@ -62,7 +62,7 @@
   .list-item {
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   .item-row {

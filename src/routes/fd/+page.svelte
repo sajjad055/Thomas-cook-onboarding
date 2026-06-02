@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
 
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
@@ -63,7 +62,6 @@
     </div>
     <div class="progress-row">
       <h1 class="screen-title">Select FD & set limit</h1>
-      <ProgressComponent step={4} totalSteps={9} />
     </div>
   </div>
 
@@ -218,12 +216,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -238,7 +236,7 @@
     cursor: pointer; border-radius: 50%; transition: background 0.15s;
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
-  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 16px; gap: 16px; }
+  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 40px 16px 0 16px; gap: 16px; }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
     line-height: 1.2; color: #111827; letter-spacing: -0.25px; flex: 1;
@@ -248,7 +246,7 @@
   .fd-section { padding: 0 16px; flex-shrink: 0; }
 
   .fd-card {
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: 1px solid #D1D5DB;
     border-radius: 12px;
     overflow: hidden;
@@ -362,7 +360,7 @@
     padding: 8px 12px;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 14px;
     color: #111827; cursor: pointer;
     transition: all 0.15s ease;
@@ -380,7 +378,7 @@
 
   .custom-input-row {
     display: flex; align-items: center; gap: 4px;
-    background: #FFFDF6; border: 1px solid #242A80;
+    background: #FFFCF4; border: 1px solid #242A80;
     border-radius: 8px; padding: 8px 12px; width: calc(100% - 56px);
   }
   .custom-prefix {
@@ -540,7 +538,7 @@
 
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
   .footer-inner {

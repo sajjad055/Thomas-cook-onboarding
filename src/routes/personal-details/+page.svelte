@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import ProgressComponent from '$lib/components/ProgressComponent.svelte';
   import TextField from '$lib/components/TextField.svelte';
   import BottomSheet from '$lib/components/BottomSheet.svelte';
 
@@ -69,7 +68,6 @@
     </div>
     <div class="progress-row">
       <h1 class="screen-title">Enter personal details</h1>
-      <ProgressComponent step={6} totalSteps={9} />
     </div>
   </div>
 
@@ -236,12 +234,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     padding-bottom: 16px;
     flex-shrink: 0;
     display: flex;
@@ -262,7 +260,7 @@
 
   .progress-row {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding: 0 16px; gap: 16px;
+    padding: 40px 16px 0 16px; gap: 16px;
   }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
@@ -312,7 +310,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     transition: border-color 0.15s;
   }
   .radio-check.checked { border: none; background: none; }
@@ -368,7 +366,7 @@
     padding: 4px 8px;
     border-radius: 500px;
     border: 1px solid #D1D5DB;
-    background: #FFFDF6;
+    background: #FFFCF4;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 400;
     font-size: 12px;
@@ -388,7 +386,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     padding: 10px 12px;
@@ -398,7 +396,7 @@
   }
   .dropdown-field.active {
     border-color: #242A80;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   .dropdown-content {
@@ -436,7 +434,7 @@
   .nw-list {
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid #F3F4F6;
@@ -447,14 +445,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: none;
     cursor: pointer;
     text-align: left;
     transition: background 0.12s;
     width: 100%;
   }
-  .nw-item:active { background: #FFFDF6; }
+  .nw-item:active { background: #FFFCF4; }
 
   .nw-text {
     font-family: 'Nunito Sans', sans-serif;
@@ -474,7 +472,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     transition: border-color 0.15s;
   }
   .nw-radio.checked { border: none; background: none; }
@@ -497,7 +495,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 

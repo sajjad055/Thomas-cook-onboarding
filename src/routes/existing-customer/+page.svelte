@@ -156,7 +156,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   .main-content-container {
@@ -175,7 +175,7 @@
     gap: 24px;
     padding: 0 0 16px;
     width: 100%;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 
@@ -248,7 +248,7 @@
     display: flex;
     flex-direction: column;
     align-self: stretch;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: 1px solid #D1D5DB;
     border-radius: 12px;
     cursor: pointer;
@@ -281,7 +281,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     transition: border-color 0.15s;
   }
   .radio.checked { border: none; background: none; }
@@ -428,7 +428,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 16px 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
     width: 100%;
   }

@@ -150,7 +150,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
     position: relative;
   }
 
@@ -373,13 +373,13 @@
     align-items: center;
     gap: 8px;
     padding: 12px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border: none;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s;
   }
-  .name-item:active { background: #FFFDF6; }
+  .name-item:active { background: #FFFCF4; }
 
   .radio {
     width: 20px;
@@ -390,7 +390,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFDF6;
+    background: #FFFCF4;
     transition: border-color 0.15s;
   }
   .radio.checked { border: none; background: none; }
@@ -426,7 +426,7 @@
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 

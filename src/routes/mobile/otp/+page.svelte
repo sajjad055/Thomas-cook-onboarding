@@ -182,12 +182,12 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   /* ── Header — white bg, gap:24px ── */
   .header-area {
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -356,7 +356,7 @@
   /* ── Footer  pt:20px pb:20px  px:16px ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 20px 16px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     flex-shrink: 0;
   }
 

@@ -90,7 +90,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    background: #FFFDF6;
+    background: #FFFCF4;
   }
 
   .center-area {
@@ -112,7 +112,7 @@
   }
 
   .receipt-card {
-    background: #FFFDF6;
+    background: #FFFCF4;
     width: calc(100% - 32px);
     display: flex;
     flex-direction: column;
@@ -179,7 +179,7 @@
   .scallop-dot {
     width: 11px;
     height: 7px;
-    background: #FFFDF6;
+    background: #FFFCF4;
     border-radius: 50% 50% 0 0;
     flex-shrink: 0;
   }
