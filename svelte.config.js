@@ -12,7 +12,7 @@ const config = {
 			fallback: 'index.html'
 		}),
 		paths: {
-			base: dev ? '' : '/thomas-cook-onboarding'
+			base: dev ? '' : '/Thomas-cook-onboarding'
 		}
 	}
 };
