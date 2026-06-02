@@ -346,10 +346,10 @@ body {
   font-size: 32px;
 }
 
-/* Duotone headset — secondary layer in orange */
+/* Duotone headset — secondary layer same as primary (black) */
 .ph-duotone.ph-headset:before {
-  color: #FF8C00;
-  opacity: 1;
+  color: #111827;
+  opacity: 0.2;
 }
 
 /* Color helpers */
