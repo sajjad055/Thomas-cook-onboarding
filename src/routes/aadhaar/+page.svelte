@@ -42,7 +42,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto(`${base}/pan`);
+    goto(`${base}/aadhaar/otp`);
   }
 </script>
 
@@ -173,7 +173,7 @@
   /* ── Header ── */
   .header-area {
     background: #FFFCF4;
-    padding-bottom: 16px;
+    padding-bottom: 0;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -242,7 +242,7 @@
 
   /* ── Form ── */
   .form-area {
-    padding: 20px 0 0;
+    padding: 24px 0 0;
     border-radius: 16px 16px 0 0;
     flex-shrink: 0;
   }

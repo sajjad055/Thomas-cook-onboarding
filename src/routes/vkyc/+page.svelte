@@ -216,7 +216,7 @@
   /* ── Header ── */
   .header-area {
     background: #FFFCF4;
-    padding-bottom: 16px;
+    padding-bottom: 0;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;

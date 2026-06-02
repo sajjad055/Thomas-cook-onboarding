@@ -16,6 +16,7 @@
     '/mobile': 2,
     '/mobile/otp': 3,
     '/aadhaar': 4,
+    '/aadhaar/otp': 4.5,
     '/pan': 5,
     '/fd': 6,
     '/payment': 7,

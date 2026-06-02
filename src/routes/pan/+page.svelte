@@ -1,8 +1,10 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
+  import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import TextField from '$lib/components/TextField.svelte';
+  import ToastMessage from '$lib/components/ToastMessage.svelte';
 
   let pan = $state('');
   let dob = $state('17/08/1999');
@@ -10,6 +12,12 @@
   let agreed = $state(false);
   let loading = $state(false);
   let panTouched = $state(false);
+  let showToast = $state(false);
+
+  onMount(() => {
+    showToast = true;
+    setTimeout(() => { showToast = false; }, 2000);
+  });
 
   // PAN: 5 letters, 4 digits, 1 letter
   let panUpper = $derived(pan.toUpperCase());
@@ -36,7 +44,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto(`${base}/fd`);
+    goto(`${base}/income`);
   }
 </script>
 
@@ -57,11 +65,13 @@
         </button>
       </div>
     </div>
+    <!-- Illustration frame -->
+    <div class="illustration-frame">
+      <img src="{base}/security.svg" alt="Security" class="illustration-img" />
+    </div>
+
     <div class="progress-row">
-      <div class="title-with-illustration">
-        <img src="/pan-illustration.svg" alt="" class="pan-illustration" width="42" height="30" draggable="false" />
-        <h1 class="screen-title">Enter PAN details</h1>
-      </div>
+      <h1 class="screen-title">Enter PAN details</h1>
     </div>
   </div>
 
@@ -136,6 +146,11 @@
     </div>
   </div>
 
+  <!-- Toast -->
+  <div class="toast-position">
+    <ToastMessage state="success" message="Aadhaar successfully verified" visible={showToast} onclose={() => { showToast = false; }} />
+  </div>
+
 </div>
 
 <style>
@@ -145,11 +160,20 @@
     display: flex;
     flex-direction: column;
     background: #FFFCF4;
+    position: relative;
+  }
+
+  .toast-position {
+    position: fixed;
+    bottom: 90px;
+    left: 16px;
+    right: 16px;
+    z-index: 100;
   }
 
   .header-area {
     background: #FFFCF4;
-    padding-bottom: 16px;
+    padding-bottom: 0;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -165,7 +189,26 @@
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
 
-  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 40px 16px 0 16px; gap: 16px; }
+  .illustration-frame {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    border: 0.5px solid #F5F5F5;
+    margin-left: 16px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .illustration-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 16px 16px 0 16px; gap: 16px; }
   .title-with-illustration { display: flex; align-items: flex-end; gap: 8px; flex: 1; }
   .pan-illustration { flex-shrink: 0; user-select: none; pointer-events: none; }
   .screen-title {
@@ -173,7 +216,7 @@
     line-height: 1.2; color: #111827; letter-spacing: -0.25px;
   }
 
-  .form-area { padding: 20px 0 0; border-radius: 16px 16px 0 0; flex-shrink: 0; }
+  .form-area { padding: 24px 0 0; border-radius: 16px 16px 0 0; flex-shrink: 0; }
   .form-scroll { display: flex; flex-direction: column; gap: 16px; padding: 0 16px; }
 
   .spacer { flex: 1; }
