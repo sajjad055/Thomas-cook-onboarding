@@ -38,6 +38,12 @@
       type: 'chips',
       options: ['Salary', 'Business income', 'Rental income', 'Investment returns', 'Pension', 'Agriculture', 'Other'],
       value: ''
+    },
+    {
+      label: 'Your net worth',
+      type: 'chips',
+      options: ['₹2 to 5 lakhs', '₹5 to 10 lakhs', '₹10 to 25 lakhs', '₹25 to 50 lakhs', '₹50 lakhs to 1 crore', 'Above ₹1 crore'],
+      value: ''
     }
   ]);
 
@@ -58,7 +64,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto(`${base}/address`);
+    goto(`${base}/verification`);
   }
 </script>
 

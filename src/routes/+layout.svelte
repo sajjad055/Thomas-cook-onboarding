@@ -24,6 +24,7 @@
     '/card-name': 8,
     '/personal-details': 9,
     '/income': 10,
+    '/verification': 10.5,
     '/address': 11,
     '/vkyc': 12,
     '/card-activation': 13,

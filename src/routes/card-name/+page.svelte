@@ -13,7 +13,7 @@
   let loading = $state(false);
 
   // Animated credit limit counter
-  const CREDIT_LIMIT = 22500;
+  const CREDIT_LIMIT = 100000;
   const animatedLimit = tweened(0, { duration: 1200, easing: cubicOut });
   let formattedLimit = $derived('₹' + Math.round($animatedLimit).toLocaleString('en-IN'));
   let limitPopped = $state(false);
@@ -52,10 +52,14 @@
 
     <!-- Card with name overlay -->
     {#if showCard}
-      <div class="card-wrap" in:fly={{ y: 40, duration: 500, easing: cubicOut }}>
-        <img src="/dcb-card-updated.svg" alt="IOB Payless Card" class="card-img" draggable="false" />
-        <!-- Name overlay on card -->
-        <span class="card-name">{selectedName.toUpperCase()}</span>
+      <div class="card-scene" in:fly={{ y: 40, duration: 500, easing: cubicOut }}>
+        <div class="card-wrap">
+          <img src="{base}/tc-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+          <span class="card-name">{selectedName.toUpperCase()}</span>
+        </div>
+        <div class="card-shadow-wrap">
+          <div class="card-shadow"></div>
+        </div>
       </div>
     {/if}
   </div>
@@ -66,7 +70,7 @@
     <!-- Heading -->
     {#if showHeading}
       <p class="heading-text" in:fade={{ duration: 350 }}>
-        Great! You are one more step closer<br/>to your IOB credit card
+        Great! You are one more step closer<br/>to your TC travel card
       </p>
     {/if}
 
@@ -74,10 +78,13 @@
     {#if showLimit}
       <div class="limit-block" in:fly={{ y: 16, duration: 350, easing: cubicOut }}>
         <div class="limit-badge">
-          <span class="limit-badge-text">Your credit limit</span>
+          <span class="limit-badge-text">Your approved credit limit</span>
         </div>
         <div class="limit-amount-wrap">
           <span class="limit-amount" class:shimmer={limitPopped}>{formattedLimit}</span>
+        </div>
+        <div class="limit-pill">
+          <span class="limit-pill-text">Your limit can grow as you use the card</span>
         </div>
       </div>
     {/if}
@@ -158,7 +165,7 @@
   .card-section {
     position: relative;
     width: 100%;
-    height: 283px;
+    height: 355px;
     flex-shrink: 0;
     overflow: visible;
   }
@@ -183,40 +190,78 @@
     to   { transform: translateX(-50%) rotate(360deg); }
   }
 
-  .card-wrap {
+  .card-scene {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 91px;
     width: 288px;
-    height: 192px;
+    height: 230px;
     z-index: 1;
   }
 
+  .card-wrap {
+    width: 346px;
+    height: 230px;
+    position: absolute;
+    top: 0;
+    left: -29px;
+    animation: cardFloat 3.5s ease-in-out infinite;
+  }
+
+  /* Shadow pinned to a fixed spot at the bottom — never moves vertically */
+  .card-shadow-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .card-shadow {
+    width: 160px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 48, 129, 0.25);
+    filter: blur(3px);
+    animation: shadowScale 3.5s ease-in-out infinite;
+  }
+
+  /* Card floats up and down */
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  /* Shadow: when card is up (50%) shadow shrinks, when card is down (0%/100%) shadow is full size */
+  @keyframes shadowScale {
+    0%, 100% { transform: scaleX(1); opacity: 0.7; }
+    50% { transform: scaleX(0.55); opacity: 0.2; }
+  }
+
   .card-img {
-    width: 288px;
-    height: 192px;
+    width: 346px;
+    height: 230px;
     display: block;
     user-select: none;
     pointer-events: none;
   }
 
-  /* Name overlay on card — matches Figma x:63 y:113, tilted to match card perspective */
+  /* Name overlay on card — aligned near RuPay at bottom-left of the visible card */
   .card-name {
     position: absolute;
-    left: 63px;
-    top: 113px;
+    left: 97px;
+    top: 160px;
     font-family: 'Nunito Sans', sans-serif;
-    font-weight: 600;
-    font-size: 10px;
+    font-weight: 700;
+    font-size: 9px;
     line-height: 1.32;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.9);
     pointer-events: none;
     user-select: none;
-    transform: rotate(9.09deg);
+    transform: rotate(15.7deg);
     transform-origin: left center;
-    will-change: transform;
+    z-index: 2;
   }
 
   /* ── Content section ── */
@@ -281,12 +326,13 @@
   .limit-amount {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 600;
-    font-size: 24px;
+    font-size: 32px;
     line-height: 1.32;
     color: #111827;
     text-align: center;
     position: relative;
     z-index: 0;
+    text-shadow: 1px 0.5px 0px #FFFFFF;
   }
 
   /* CRED-style shimmer: two tilted white bars with 4px gap sweep left→right, once */
@@ -319,6 +365,24 @@
   @keyframes credShimmer {
     0%   { left: -80%; }
     100% { left: 150%; }
+  }
+
+  /* Limit increase pill */
+  .limit-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: #F0FDF4;
+    border-radius: 20px;
+    margin-top: 6px;
+  }
+  .limit-pill-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: #15803D;
+    line-height: 1.4;
   }
 
   /* Name section */
@@ -366,6 +430,7 @@
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     overflow: hidden;
+    background: #FFFFFF;
   }
 
   .name-item {
@@ -373,7 +438,7 @@
     align-items: center;
     gap: 8px;
     padding: 12px;
-    background: #FFFCF4;
+    background: #FFFFFF;
     border: none;
     cursor: pointer;
     text-align: left;

@@ -282,15 +282,16 @@
 
   .step-text-input {
     flex: 1;
-    padding: 10px 12px;
-    background: #FFFCF4;
+    padding: 14px 12px;
+    background: #FFFFFF;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     font-family: 'Nunito Sans', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
     color: #111827;
     outline: none;
+    min-height: 52px;
     transition: border-color 0.15s ease;
   }
   .step-text-input:focus {

@@ -36,8 +36,7 @@
   let allValid = $derived(
     maritalStatus !== null &&
     parentName.trim().length > 0 &&
-    motherName.trim().length > 0 &&
-    netWorth.trim().length > 0
+    motherName.trim().length > 0
   );
 
   async function handleSubmit() {
@@ -66,6 +65,11 @@
         </button>
       </div>
     </div>
+    <!-- Illustration frame -->
+    <div class="illustration-frame">
+      <img src="{base}/security.svg" alt="" class="illustration-img" />
+    </div>
+
     <div class="progress-row">
       <h1 class="screen-title">Enter personal details</h1>
     </div>
@@ -119,35 +123,13 @@
       </div>
     </div>
 
-    <!-- Father / Spouse name -->
+    <!-- Father's name -->
     <div class="section">
-      <div class="field-group">
-
-        <!-- Toggle label row -->
-        <div class="toggle-label-row">
-          <span class="toggle-prefix">I'll enter name of my</span>
-          <div class="toggle-pills">
-            <button
-              class="toggle-pill"
-              class:active={nameOf === 'father'}
-              onclick={() => nameOf = 'father'}
-            >Father</button>
-            <button
-              class="toggle-pill"
-              class:active={nameOf === 'spouse'}
-              onclick={() => nameOf = 'spouse'}
-            >Spouse</button>
-          </div>
-        </div>
-
-        <!-- Name field -->
-        <TextField
-          label={nameOf === 'father' ? "Father's name" : "Spouse's name"}
-          bind:value={parentName}
-          placeholder="Enter name"
-        />
-
-      </div>
+      <TextField
+        label="Father's name"
+        bind:value={parentName}
+        placeholder="Enter name"
+      />
     </div>
 
     <!-- Mother's maiden name -->
@@ -158,26 +140,6 @@
         placeholder="Enter name"
         supportText="What is mother's maiden name? <a href='#'>Know more</a>"
       />
-    </div>
-
-    <!-- Net worth -->
-    <div class="section">
-      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-      <div
-        class="dropdown-field"
-        class:active={netWorth.length > 0}
-        onclick={() => showNetWorthSheet = true}
-      >
-        <div class="dropdown-content">
-          <span class="dropdown-label" class:floated={netWorth.length > 0}>
-            Your net worth
-          </span>
-          {#if netWorth.length > 0}
-            <span class="dropdown-value">{netWorth}</span>
-          {/if}
-        </div>
-        <i class="ph ph-caret-down" style="font-size:20px; color:#242A80; flex-shrink:0"></i>
-      </div>
     </div>
 
   </div>
@@ -258,9 +220,28 @@
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
 
+  .illustration-frame {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    border: 0.5px solid #F5F5F5;
+    margin-left: 16px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .illustration-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .progress-row {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding: 40px 16px 0 16px; gap: 16px;
+    padding: 16px 16px 0 16px; gap: 16px;
   }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;

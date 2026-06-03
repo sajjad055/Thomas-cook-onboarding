@@ -47,6 +47,11 @@
         </button>
       </div>
     </div>
+    <!-- Illustration frame -->
+    <div class="illustration-frame">
+      <img src="{base}/security.svg" alt="" class="illustration-img" />
+    </div>
+
     <div class="progress-row">
       <div class="title-col">
         <h1 class="screen-title">Make a payment</h1>
@@ -168,7 +173,9 @@
     cursor: pointer; border-radius: 50%; transition: background 0.15s;
   }
   .icon-btn:active { background: rgba(0,0,0,0.06); }
-  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 40px 16px 0 16px; gap: 16px; }
+  .illustration-frame { width: 60px; height: 60px; border-radius: 50%; background: #F3F4F6; border: 0.5px solid #F5F5F5; margin-left: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .illustration-img { width: 100%; height: 100%; object-fit: cover; }
+  .progress-row { display: flex; align-items: flex-end; justify-content: space-between; padding: 16px 16px 0 16px; gap: 16px; }
   .title-col { display: flex; flex-direction: column; gap: 3px; flex: 1; }
   .screen-title {
     font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 24px;
