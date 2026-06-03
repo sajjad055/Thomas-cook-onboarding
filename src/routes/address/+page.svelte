@@ -15,7 +15,7 @@
     { id: 1, text: 'Tanvi residency, Anugraha layout, Bilekahalli, Bangalore, Karnataka – 560076' },
   ]);
 
-  let selectedId = $state(1);
+  let selectedId = $state<number | null>(null);
   let understood = $state(false);
   let loading = $state(false);
   let addedSecond = $state(false);
@@ -57,7 +57,7 @@
   <div class="header-area">
     <StatusBar />
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/income`)}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/personal-details`)}>
         <i class="ph ph-caret-left" style="font-size:24px; color:#111827"></i>
       </button>
       <div class="icon-group">
@@ -72,44 +72,50 @@
     </div>
 
     <div class="progress-row">
-      <h1 class="screen-title">Select Your communication address</h1>
+      <h1 class="screen-title">Select or add communication address</h1>
     </div>
   </div>
 
   <!-- ── FORM ── -->
   <div class="form-area">
 
-    <!-- Add new address -->
-    <button class="add-row" onclick={addNewAddress} disabled={addedSecond}>
-      <i class="ph ph-plus" style="font-size:24px; color:#242A80"></i>
-      <span class="add-text">Add new address</span>
-    </button>
+    <!-- Address container (white bg) -->
+    <div class="address-container">
+      <!-- Address list -->
+      <div class="address-list">
+        {#each addresses as addr (addr.id)}
+          <button
+            class="address-card"
+            class:selected={selectedId === addr.id}
+            onclick={() => selectedId = addr.id}
+            in:fly={{ y: 16, duration: 280, easing: cubicOut }}
+          >
+            <!-- Radio -->
+            <div class="radio" class:checked={selectedId === addr.id}>
+              {#if selectedId === addr.id}
+                <div class="check-anim">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#15803D"/>
+                    <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              {/if}
+            </div>
 
-    <!-- Address list -->
-    <div class="address-list">
-      {#each addresses as addr (addr.id)}
-        <button
-          class="address-card"
-          class:selected={selectedId === addr.id}
-          onclick={() => selectedId = addr.id}
-          in:fly={{ y: 16, duration: 280, easing: cubicOut }}
-        >
-          <!-- Radio -->
-          <div class="radio" class:checked={selectedId === addr.id}>
-            {#if selectedId === addr.id}
-              <div class="check-anim">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                  <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            {/if}
-          </div>
+            <!-- Address text -->
+            <p class="address-text">{addr.text}</p>
+          </button>
+        {/each}
+      </div>
 
-          <!-- Address text -->
-          <p class="address-text">{addr.text}</p>
-        </button>
-      {/each}
+      <!-- Dashed separator -->
+      <div class="dashed-divider"></div>
+
+      <!-- Add new address -->
+      <button class="add-row" onclick={addNewAddress} disabled={addedSecond}>
+        <i class="ph ph-plus" style="font-size:20px; color:#111827"></i>
+        <span class="add-text">Add new address</span>
+      </button>
     </div>
 
   </div>
@@ -150,7 +156,7 @@
     <!-- CTA -->
     <button
       class="btn-primary"
-      disabled={!understood || loading}
+      disabled={!understood || !selectedId || loading}
       onclick={handleContinue}
     >
       {#if loading}
@@ -229,10 +235,27 @@
     flex-shrink: 0;
   }
 
+  /* ── Address container ── */
+  .address-container {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .dashed-divider {
+    border: none;
+    border-top: 1px dashed #D1D5DB;
+    margin: 12px 0;
+  }
+
   /* ── Add new address ── */
   .add-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     background: none;
     border: none;
@@ -247,7 +270,7 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
-    color: #242A80;
+    color: #111827;
   }
 
   /* ── Address list ── */
@@ -262,11 +285,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px;
+    padding: 0;
     width: 100%;
-    background: #FFFCF4;
-    border: 1px solid #D1D5DB;
-    border-radius: 12px;
+    background: none;
+    border: none;
+    border-radius: 0;
     cursor: pointer;
     text-align: left;
   }
@@ -282,7 +305,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFCF4;
+    background: transparent;
     transition: border-color 0.15s;
   }
   .radio.checked { border: none; background: none; }
@@ -371,7 +394,7 @@
   .nw-list {
     display: flex;
     flex-direction: column;
-    background: #FFFCF4;
+    background: #FFFFFF;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid #F3F4F6;

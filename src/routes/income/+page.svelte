@@ -76,7 +76,7 @@
   <div class="header-area">
     <StatusBar />
     <div class="icon-row">
-      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/personal-details`)}>
+      <button class="icon-btn" aria-label="Back" onclick={() => goto(`${base}/pan`)}>
         <i class="ph ph-caret-left" style="font-size:24px; color:#111827"></i>
       </button>
       <div class="icon-group">

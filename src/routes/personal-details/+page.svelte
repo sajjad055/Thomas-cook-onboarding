@@ -44,7 +44,7 @@
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto(`${base}/income`);
+    goto(`${base}/address`);
   }
 </script>
 

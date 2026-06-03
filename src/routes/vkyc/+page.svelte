@@ -64,10 +64,6 @@
         </button>
       </div>
     </div>
-    <!-- Illustration frame -->
-    <div class="illustration-frame">
-      <img src="{base}/security.svg" alt="" class="illustration-img" />
-    </div>
 
     <div class="progress-row">
       <h1 class="screen-title">Complete video KYC</h1>
@@ -80,43 +76,15 @@
     <!-- Main card -->
     <div class="main-card">
 
-      <!-- Blue highlight row: illustration + step text + timer -->
+      <!-- VKYC Banner -->
       <div class="highlight-row">
-
-        <!-- VKYC illustration -->
-        <img src="/vkyc.svg" alt="" class="vkyc-illustration" draggable="false" aria-hidden="true" />
-
-        <!-- Right side: text + timer -->
-        <div class="highlight-right">
-          <div class="step-text-wrap">
-            <p class="step-text">
-              <span class="step-pill">Just <span class="step-num">1 Step</span> left</span>
-            </p>
-            <p class="step-sub">Complete it before the specified time</p>
-          </div>
-
-          <!-- Timer + info -->
-          <div class="timer-row">
-            <div class="timer">
-              <div class="timer-block">{hh[0]}</div>
-              <div class="timer-block">{hh[1]}</div>
-              <span class="timer-colon">:</span>
-              <div class="timer-block">{mm[0]}</div>
-              <div class="timer-block">{mm[1]}</div>
-              <span class="timer-colon">:</span>
-              <div class="timer-block">{ss[0]}</div>
-              <div class="timer-block">{ss[1]}</div>
-            </div>
-            <i class="ph ph-info" style="font-size:15px; color:#6B7280"></i>
-          </div>
-        </div>
-
+        <img src="{base}/vkyc-banner.svg" alt="Video KYC" class="vkyc-banner-img" draggable="false" />
       </div>
 
       <!-- Sub-heading with divider lines -->
       <div class="sub-heading-row">
         <div class="sub-line sub-line-left"></div>
-        <span class="sub-heading">Keep the below things ready. Our agent will guide you</span>
+        <span class="sub-heading">Keep the below things ready & get started</span>
         <div class="sub-line sub-line-right"></div>
       </div>
 
@@ -282,20 +250,26 @@
     padding: 0 12px 16px;
     border: 0.5px solid #D1D5DB;
     border-radius: 12px;
-    background: #FFFCF4;
+    background: #FFFFFF;
   }
 
   /* ── Highlight row ── */
   .highlight-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    justify-content: center;
     background: linear-gradient(180deg, #DCECFD 0%, #FFFFFF 100%);
     border-radius: 12px 12px 0 0;
-    padding: 12px;
+    padding: 0;
     margin: 0 -12px;
     margin-top: 0;
+    overflow: hidden;
+  }
+
+  .vkyc-banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .vkyc-illustration {
@@ -317,7 +291,7 @@
   .step-text-wrap {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     gap: 4px;
   }
 
@@ -394,8 +368,11 @@
   /* ── Sub-heading with divider lines ── */
   .sub-heading-row {
     display: flex;
+    padding: 12px 0;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 3px;
+    align-self: stretch;
   }
 
   .sub-line {
@@ -534,14 +511,14 @@
     gap: 16px;
     padding: 10px 12px;
     width: 100%;
-    background: #FFFCF4;
+    background: #FFFFFF;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s;
   }
-  .faq-item:active { background: #FFFCF4; }
+  .faq-item:active { background: #F9FAFB; }
 
   .faq-text {
     font-family: 'Nunito Sans', sans-serif;

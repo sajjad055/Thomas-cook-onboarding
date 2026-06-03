@@ -113,7 +113,7 @@
   .backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 100;
   }
 
@@ -124,7 +124,7 @@
     left: 0;
     right: 0;
     width: 100%;
-    background: #FFFCF4;
+    background: #F9FAFB;
     border-radius: 16px 16px 0 0;
     z-index: 101;
     display: flex;
@@ -187,7 +187,7 @@
 
   /* ── Footer slot ── */
   .sheet-footer {
-    background: #FFFCF4;
+    background: #F9FAFB;
     padding: 20px 16px;
     flex-shrink: 0;
     display: flex;

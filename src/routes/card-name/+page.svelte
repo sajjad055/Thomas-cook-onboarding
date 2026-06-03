@@ -455,7 +455,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #FFFCF4;
+    background: transparent;
     transition: border-color 0.15s;
   }
   .radio.checked { border: none; background: none; }
