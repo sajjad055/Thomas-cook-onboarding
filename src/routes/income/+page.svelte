@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
-  import { tick, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import BottomSheet from '$lib/components/BottomSheet.svelte';
+  import ProgressiveInputStepper from '$lib/components/ProgressiveInputStepper.svelte';
   import ToastMessage from '$lib/components/ToastMessage.svelte';
 
   let showToast = $state(false);
@@ -13,75 +13,45 @@
     setTimeout(() => { showToast = false; }, 2000);
   });
 
-  // Field values
-  let occupation = $state('');
-  let grossIncome = $state('');
-  let sourceOfIncome = $state('');
-
-  // Sheet visibility
-  let showOccupationSheet = $state(false);
-  let showIncomeSheet = $state(false);
-  let showSourceSheet = $state(false);
+  // Stepper steps
+  let steps = $state([
+    {
+      label: 'Your occupation',
+      type: 'chips',
+      options: ['Salaried', 'Self-employed', 'Business owner', 'Freelancer / Consultant', 'Retired', 'Student', 'Homemaker'],
+      value: ''
+    },
+    {
+      label: 'Enter your company name',
+      type: 'text',
+      placeholder: 'e.g. Acme Corp',
+      value: ''
+    },
+    {
+      label: 'Gross annual income',
+      type: 'chips',
+      options: ['Below ₹2.5 lakhs', '₹2.5 to 5 lakhs', '₹5 to 10 lakhs', '₹10 to 25 lakhs', '₹25 to 50 lakhs', 'Above ₹50 lakhs'],
+      value: ''
+    },
+    {
+      label: 'Primary source of income',
+      type: 'chips',
+      options: ['Salary', 'Business income', 'Rental income', 'Investment returns', 'Pension', 'Agriculture', 'Other'],
+      value: ''
+    }
+  ]);
 
   let loading = $state(false);
 
-  // Options
-  const occupationOptions = [
-    'Salaried',
-    'Self-employed',
-    'Business owner',
-    'Freelancer / Consultant',
-    'Retired',
-    'Student',
-    'Homemaker',
-    'Other',
-  ];
-
-  const incomeOptions = [
-    'Below ₹2.5 lakhs',
-    '₹2.5 to 5 lakhs',
-    '₹5 to 10 lakhs',
-    '₹10 to 25 lakhs',
-    '₹25 to 50 lakhs',
-    'Above ₹50 lakhs',
-  ];
-
-  const sourceOptions = [
-    'Salary',
-    'Business income',
-    'Rental income',
-    'Investment returns',
-    'Pension',
-    'Agriculture',
-    'Other',
-  ];
-
-  // Cascade: select occupation → auto-open income sheet
-  async function selectOccupation(val: string) {
-    occupation = val;
-    showOccupationSheet = false;
-    await tick();
-    setTimeout(() => { showIncomeSheet = true; }, 320);
+  function handleStepChange(stepIndex: number, value: string) {
+    steps[stepIndex].value = value;
+    // Clear subsequent steps when a previous one changes
+    for (let i = stepIndex + 1; i < steps.length; i++) {
+      steps[i].value = '';
+    }
   }
 
-  // Cascade: select income → auto-open source sheet
-  async function selectIncome(val: string) {
-    grossIncome = val;
-    showIncomeSheet = false;
-    await tick();
-    setTimeout(() => { showSourceSheet = true; }, 320);
-  }
-
-  function selectSource(val: string) {
-    sourceOfIncome = val;
-    showSourceSheet = false;
-  }
-
-  let allValid = $derived(
-    occupation.length > 0 &&
-    grossIncome.length > 0 &&
-    sourceOfIncome.length > 0
-  );
+  let allValid = $derived(steps.every(s => s.value !== ''));
 
   async function handleSubmit() {
     if (!allValid) return;
@@ -121,63 +91,7 @@
 
   <!-- ── FORM ── -->
   <div class="form-area">
-
-    <!-- Occupation -->
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-    <div
-      class="dropdown-field"
-      class:active={occupation.length > 0}
-      onclick={() => showOccupationSheet = true}
-      role="button"
-      tabindex="0"
-    >
-      <div class="dropdown-content">
-        <span class="dropdown-label" class:floated={occupation.length > 0}>Your occupation</span>
-        {#if occupation.length > 0}
-          <span class="dropdown-value">{occupation}</span>
-        {/if}
-      </div>
-      <i class="ph ph-caret-down" style="font-size:20px; color:#242A80; flex-shrink:0"></i>
-    </div>
-
-    <!-- Gross annual income -->
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-    <div
-      class="dropdown-field"
-      class:active={grossIncome.length > 0}
-      class:disabled={occupation.length === 0}
-      onclick={() => { if (occupation.length > 0) showIncomeSheet = true; }}
-      role="button"
-      tabindex="0"
-    >
-      <div class="dropdown-content">
-        <span class="dropdown-label" class:floated={grossIncome.length > 0}>Gross annual income</span>
-        {#if grossIncome.length > 0}
-          <span class="dropdown-value">{grossIncome}</span>
-        {/if}
-      </div>
-      <i class="ph ph-caret-down" style="font-size:20px; color:{occupation.length > 0 ? '#242A80' : '#D1D5DB'}; flex-shrink:0"></i>
-    </div>
-
-    <!-- Primary source of income -->
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-    <div
-      class="dropdown-field"
-      class:active={sourceOfIncome.length > 0}
-      class:disabled={grossIncome.length === 0}
-      onclick={() => { if (grossIncome.length > 0) showSourceSheet = true; }}
-      role="button"
-      tabindex="0"
-    >
-      <div class="dropdown-content">
-        <span class="dropdown-label" class:floated={sourceOfIncome.length > 0}>Primary source of income</span>
-        {#if sourceOfIncome.length > 0}
-          <span class="dropdown-value">{sourceOfIncome}</span>
-        {/if}
-      </div>
-      <i class="ph ph-caret-down" style="font-size:20px; color:{grossIncome.length > 0 ? '#242A80' : '#D1D5DB'}; flex-shrink:0"></i>
-    </div>
-
+    <ProgressiveInputStepper {steps} onchange={handleStepChange} />
   </div>
 
   <div class="spacer"></div>
@@ -203,78 +117,6 @@
   </div>
 
 </div>
-
-<!-- ── OCCUPATION SHEET ── -->
-<BottomSheet bind:open={showOccupationSheet} title="Select your occupation">
-  <div class="option-list">
-    {#each occupationOptions as opt, i}
-      <button class="option-item" onclick={() => selectOccupation(opt)}>
-        <span class="option-text">{opt}</span>
-        <div class="option-radio" class:checked={occupation === opt}>
-          {#if occupation === opt}
-            <div class="check-anim">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          {/if}
-        </div>
-      </button>
-      {#if i < occupationOptions.length - 1}
-        <div class="option-divider"></div>
-      {/if}
-    {/each}
-  </div>
-</BottomSheet>
-
-<!-- ── GROSS INCOME SHEET ── -->
-<BottomSheet bind:open={showIncomeSheet} title="Select gross annual income">
-  <div class="option-list">
-    {#each incomeOptions as opt, i}
-      <button class="option-item" onclick={() => selectIncome(opt)}>
-        <span class="option-text">{opt}</span>
-        <div class="option-radio" class:checked={grossIncome === opt}>
-          {#if grossIncome === opt}
-            <div class="check-anim">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          {/if}
-        </div>
-      </button>
-      {#if i < incomeOptions.length - 1}
-        <div class="option-divider"></div>
-      {/if}
-    {/each}
-  </div>
-</BottomSheet>
-
-<!-- ── SOURCE OF INCOME SHEET ── -->
-<BottomSheet bind:open={showSourceSheet} title="Select source of income">
-  <div class="option-list">
-    {#each sourceOptions as opt, i}
-      <button class="option-item" onclick={() => selectSource(opt)}>
-        <span class="option-text">{opt}</span>
-        <div class="option-radio" class:checked={sourceOfIncome === opt}>
-          {#if sourceOfIncome === opt}
-            <div class="check-anim">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          {/if}
-        </div>
-      </button>
-      {#if i < sourceOptions.length - 1}
-        <div class="option-divider"></div>
-      {/if}
-    {/each}
-  </div>
-</BottomSheet>
 
 <style>
   .screen {
