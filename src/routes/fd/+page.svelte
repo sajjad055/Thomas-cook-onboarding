@@ -155,7 +155,7 @@
     <div class="benefits-card">
       <!-- Top: Banner SVG -->
       <div class="benefits-banner">
-        <img src="/card-benefits-banner.svg" alt="Card benefits" width="100%" draggable="false" />
+        <img src="{base}/card-benefits-banner.svg" alt="Card benefits" width="100%" draggable="false" />
       </div>
 
       <!-- Bottom: Offers ribbon -->
@@ -164,7 +164,7 @@
         <div class="offers-content">
           <div class="offers-top-row">
             <div class="offer-tag-wrap">
-              <img src="/offer-tag.svg" alt="" width="31" height="31" draggable="false" />
+              <img src="{base}/offer-tag.svg" alt="" width="31" height="31" draggable="false" />
             </div>
             <div class="offers-label-col">
               <span class="offers-label">Offers on<br/>top brands</span>
@@ -172,17 +172,17 @@
           </div>
           <div class="brand-marquee-mask">
             <div class="brand-marquee-track">
-              <img src="/flipkart.svg" alt="Flipkart" class="brand-logo" />
-              <img src="/amazon.svg" alt="Amazon" class="brand-logo" />
-              <img src="/myntra.svg" alt="Myntra" class="brand-logo" />
-              <img src="/netflix.svg" alt="Netflix" class="brand-logo" />
-              <img src="/swiggy.svg" alt="Swiggy" class="brand-logo" />
+              <img src="{base}/flipkart.svg" alt="Flipkart" class="brand-logo" />
+              <img src="{base}/amazon.svg" alt="Amazon" class="brand-logo" />
+              <img src="{base}/myntra.svg" alt="Myntra" class="brand-logo" />
+              <img src="{base}/netflix.svg" alt="Netflix" class="brand-logo" />
+              <img src="{base}/swiggy.svg" alt="Swiggy" class="brand-logo" />
               <!-- Duplicate set for seamless loop -->
-              <img src="/flipkart.svg" alt="" class="brand-logo" aria-hidden="true" />
-              <img src="/amazon.svg" alt="" class="brand-logo" aria-hidden="true" />
-              <img src="/myntra.svg" alt="" class="brand-logo" aria-hidden="true" />
-              <img src="/netflix.svg" alt="" class="brand-logo" aria-hidden="true" />
-              <img src="/swiggy.svg" alt="" class="brand-logo" aria-hidden="true" />
+              <img src="{base}/flipkart.svg" alt="" class="brand-logo" aria-hidden="true" />
+              <img src="{base}/amazon.svg" alt="" class="brand-logo" aria-hidden="true" />
+              <img src="{base}/myntra.svg" alt="" class="brand-logo" aria-hidden="true" />
+              <img src="{base}/netflix.svg" alt="" class="brand-logo" aria-hidden="true" />
+              <img src="{base}/swiggy.svg" alt="" class="brand-logo" aria-hidden="true" />
             </div>
           </div>
         </div>

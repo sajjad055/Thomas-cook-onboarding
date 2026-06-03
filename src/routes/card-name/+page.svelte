@@ -48,7 +48,7 @@
   <!-- BG lighting + Card section -->
   <div class="card-section">
     <!-- BG lighting -->
-    <img src="/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
+    <img src="{base}/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
 
     <!-- Card with name overlay -->
     {#if showCard}

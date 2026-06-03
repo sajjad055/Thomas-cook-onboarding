@@ -73,7 +73,7 @@
       <div class="section-header">
         <span class="section-title">Pay with UPI apps</span>
         <div class="success-chip">
-          <img src="/bolt-green.svg" width="18" height="18" alt="" aria-hidden="true" />
+          <img src="{base}/bolt-green.svg" width="18" height="18" alt="" aria-hidden="true" />
           <span class="chip-text">High payment success rate</span>
         </div>
       </div>
@@ -83,7 +83,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
         <div class="list-item" onclick={() => handleUpiPay('Google Pay')}>
           <div class="list-icon gpay">
-            <img src="/googlepay.svg" alt="Google Pay" width="27" height="27" />
+            <img src="{base}/googlepay.svg" alt="Google Pay" width="27" height="27" />
           </div>
           <div class="list-text">
             <span class="list-title">Google pay</span>
@@ -97,7 +97,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
         <div class="list-item" onclick={() => handleUpiPay('PhonePe')}>
           <div class="list-icon phonepe">
-            <img src="/phonepe.svg" alt="PhonePe" width="27" height="27" />
+            <img src="{base}/phonepe.svg" alt="PhonePe" width="27" height="27" />
           </div>
           <div class="list-text">
             <span class="list-title">Phonepe</span>

@@ -57,15 +57,15 @@
 
   <!-- Rotating bg lighting — moves with the card -->
   <div class="bg-card-group" class:centered={phase === 'intro'} class:settled={phase === 'reveal'}>
-    <img src="/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
-    <img src="/dcb-payless-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+    <img src="{base}/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
+    <img src="{base}/dcb-payless-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
   </div>
 
   <!-- Confetti burst during intro -->
   {#if showConfetti}
     <div class="confetti-container" aria-hidden="true">
       <dotlottie-wc
-        src="/confetti.lottie"
+        src="{base}/confetti.lottie"
         autoplay
         speed="1"
         style="width: 432px; height: 480px;"

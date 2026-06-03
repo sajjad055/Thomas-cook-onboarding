@@ -95,7 +95,7 @@
         <div class="req-item req-item-blue">
           <div class="req-left">
             <div class="pan-mini">
-              <img src="/pan-illustration.svg" alt="PAN card" width="42" height="28" draggable="false" />
+              <img src="{base}/pan-illustration.svg" alt="PAN card" width="42" height="28" draggable="false" />
             </div>
             <div class="req-text-col">
               <p class="req-text">Your original physical PAN card</p>
@@ -115,7 +115,7 @@
           <!-- WiFi -->
           <div class="req-item-sm">
             <div class="req-icon-wrap">
-              <img src="/vkyc-wifi.svg" alt="WiFi" width="32" height="32" draggable="false" />
+              <img src="{base}/vkyc-wifi.svg" alt="WiFi" width="32" height="32" draggable="false" />
             </div>
             <p class="req-text-sm">A stable internet connection</p>
           </div>
@@ -125,7 +125,7 @@
           <!-- Light -->
           <div class="req-item-sm">
             <div class="req-icon-wrap">
-              <img src="/vkyc-light.svg" alt="Light" width="32" height="32" draggable="false" />
+              <img src="{base}/vkyc-light.svg" alt="Light" width="32" height="32" draggable="false" />
             </div>
             <p class="req-text-sm">You alone in a well lighted space</p>
           </div>
@@ -368,11 +368,13 @@
   /* ── Sub-heading with divider lines ── */
   .sub-heading-row {
     display: flex;
-    padding: 12px 0;
     justify-content: center;
     align-items: center;
-    gap: 3px;
     align-self: stretch;
+    gap: 10px;
+    padding: 12px 0;
+    background: #F9FAFB;
+    border-radius: 8px;
   }
 
   .sub-line {
@@ -382,21 +384,21 @@
     border-top: 0.5px solid transparent;
   }
   .sub-line-left {
-    border-image: linear-gradient(90deg, rgba(22,23,26,0) 0%, rgba(163,171,187,1) 100%) 1;
+    border-image: linear-gradient(90deg, rgba(163,171,187,1) 0%, rgba(22,23,26,0) 100%) 1;
   }
   .sub-line-right {
-    border-image: linear-gradient(90deg, rgba(163,171,187,1) 0%, rgba(22,23,26,0) 100%) 1;
+    border-image: linear-gradient(90deg, rgba(22,23,26,0) 0%, rgba(163,171,187,1) 100%) 1;
   }
 
   .sub-heading {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 600;
-    font-size: 10px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 18px;
     color: #111827;
     text-align: center;
+    white-space: nowrap;
     flex-shrink: 0;
-    max-width: 200px;
   }
 
   /* ── Requirements list ── */
@@ -559,7 +561,7 @@
 
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+    padding: 20px 16px calc(32px + env(safe-area-inset-bottom));
     background: #FFFCF4;
     flex-shrink: 0;
     display: flex;

@@ -49,7 +49,7 @@
     {#if lottieReady}
       <div class="lottie-wrap">
         <dotlottie-wc
-          src="/success.lottie"
+          src="{base}/success.lottie"
           autoplay
           speed="0.7"
           style="width: 120px; height: 120px;"

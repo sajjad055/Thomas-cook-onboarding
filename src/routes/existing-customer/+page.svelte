@@ -73,7 +73,7 @@
           <div class="toast toast-etb">
             <div class="toast-overlay toast-overlay-green"></div>
             <div class="toast-row">
-              <img src="/bolt-green.svg" width="18" height="18" alt="" aria-hidden="true" style="flex-shrink:0" />
+              <img src="{base}/bolt-green.svg" width="18" height="18" alt="" aria-hidden="true" style="flex-shrink:0" />
               <div class="toast-text-col">
                 <p class="toast-msg toast-msg-green">
                   Your card application will be super easy
@@ -112,7 +112,7 @@
             <div class="toast-overlay toast-overlay-blue"></div>
             <div class="toast-col">
               <div class="speed-chip">
-                <img src="/bolt-purple.svg" width="18" height="18" alt="" aria-hidden="true" style="flex-shrink:0" />
+                <img src="{base}/bolt-purple.svg" width="18" height="18" alt="" aria-hidden="true" style="flex-shrink:0" />
                 <span class="chip-label">Takes less than 5 minutes</span>
               </div>
               <div class="toast-text-col">
