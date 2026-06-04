@@ -192,7 +192,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #FFFCF4;
+    background: #E8F0FF;
     position: relative;
     overflow: hidden;
   }
@@ -205,10 +205,11 @@
     left: -139px;
     top: -93px;
     border-radius: 50%;
-    background: linear-gradient(90deg, #D6E4FF 0%, #E8F0FF 100%);
+    background: linear-gradient(90deg, #E8F0FF 0%, #E8F0FF 100%);
     filter: blur(25.6px);
     pointer-events: none;
     z-index: 0;
+    opacity: 0;
   }
 
   /* ── Card + BG lighting group — transitions vertically from center to top ── */
@@ -249,7 +250,7 @@
     user-select: none;
     transform-origin: center center;
     animation: bgRotate 30s linear infinite;
-    filter: saturate(0) brightness(1.8);
+    filter: saturate(0.3) brightness(1.2) hue-rotate(200deg);
   }
   @keyframes bgRotate {
     from { transform: rotate(0deg); }
@@ -472,7 +473,7 @@
   .h-step-label {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 600;
-    font-size: 11px;
+    font-size: 12px;
     color: #111827;
     text-align: center;
     line-height: 1.4;
@@ -564,8 +565,8 @@
   .processing-text {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 600;
-    font-size: 10px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 18px;
     color: #FFFFFF;
     text-align: center;
   }
