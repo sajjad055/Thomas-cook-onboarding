@@ -5,6 +5,7 @@
   import { browser } from '$app/environment';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
+  import ShimmerText from '$lib/effects/ShimmerText.svelte';
 
   // Phase 1: Card centered → Phase 2: Card moves up, content reveals
   let phase = $state<'intro' | 'reveal'>('intro');
@@ -165,9 +166,11 @@
           </div>
 
           <!-- Processing badge -->
-          <div class="processing-badge">
-            <span class="processing-text">Processing typically requires upto 48 hours</span>
-          </div>
+          <ShimmerText trigger={true} loop={true} duration={2000}>
+            <div class="processing-badge">
+              <span class="processing-text">Processing typically requires upto 48 hours</span>
+            </div>
+          </ShimmerText>
 
         </div>
       </div>

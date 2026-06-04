@@ -54,7 +54,7 @@
     </div>
 
     <div class="illustration-frame">
-      <img src="{base}/security.svg" alt="" class="illustration-img" />
+      <img src="{base}/email.svg" alt="" class="illustration-img" />
     </div>
 
     <div class="progress-row">

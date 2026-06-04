@@ -58,7 +58,7 @@
     position: absolute;
     top: -20%;
     left: -80%;
-    width: 60%;
+    width: 40%;
     height: 140%;
     background: linear-gradient(
       to right,

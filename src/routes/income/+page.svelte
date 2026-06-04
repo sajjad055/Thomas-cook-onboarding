@@ -83,7 +83,7 @@
     </div>
     <!-- Illustration frame -->
     <div class="illustration-frame">
-      <img src="{base}/security.svg" alt="Income" class="illustration-img" />
+      <img src="{base}/income.svg" alt="Income" class="illustration-img" />
     </div>
 
     <div class="progress-row">

@@ -82,7 +82,7 @@
 
     <!-- Illustration frame -->
     <div class="illustration-frame">
-      <img src="{base}/security.svg" alt="" class="illustration-img" />
+      <img src="{base}/nominee.svg" alt="" class="illustration-img" />
     </div>
 
     <div class="progress-row">
@@ -160,6 +160,9 @@
       {:else}
         Continue
       {/if}
+    </button>
+    <button class="btn-secondary" onclick={() => goto(`${base}/vkyc`)}>
+      Skip adding nominee
     </button>
   </div>
 
@@ -293,6 +296,7 @@
     position: sticky; bottom: 0; z-index: 5; margin-top: auto;
     padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
     background: #FFFCF4; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 12px;
   }
 
   .btn-primary {
@@ -304,6 +308,15 @@
   }
   .btn-primary:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
   .btn-primary:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
+
+  .btn-secondary {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 48px; background: transparent; color: #184595;
+    font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 14px;
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-secondary:active { opacity: 0.7; }
 
   .spinner {
     width: 20px; height: 20px;

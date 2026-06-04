@@ -72,7 +72,7 @@
     </div>
     <!-- Illustration frame -->
     <div class="illustration-frame">
-      <img src="{base}/security.svg" alt="" class="illustration-img" />
+      <img src="{base}/address.svg" alt="" class="illustration-img" />
     </div>
 
     <div class="progress-row">

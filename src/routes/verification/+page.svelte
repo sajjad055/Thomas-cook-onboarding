@@ -56,16 +56,18 @@
       <span></span>
     </div>
 
-    <div class="loader">
-      <span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div class="base">
-        <span></span>
-        <div class="face"></div>
+    <div class="loader-center">
+      <div class="loader">
+        <span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div class="base">
+          <span></span>
+          <div class="face"></div>
+        </div>
       </div>
     </div>
   {:else}
@@ -101,6 +103,13 @@
     {/key}
   </div>
 
+  <!-- Warning pill -->
+  {#if !done}
+    <div class="warning-pill">
+      <span class="warning-pill-text">Please don't press back or exit now</span>
+    </div>
+  {/if}
+
 </div>
 
 <style>
@@ -118,10 +127,23 @@
   }
 
   /* Rocket loader */
-  .loader {
+  .loader-center {
+    width: 180px;
+    height: 40px;
     position: relative;
-    animation: speeder 0.4s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 40px;
+  }
+
+  .loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -65px;
+    margin-top: -10px;
+    animation: speeder 0.4s linear infinite;
   }
 
   .loader > span {
@@ -335,5 +357,24 @@
     color: #6B7280;
     text-align: center;
     line-height: 1.5;
+  }
+
+  /* Warning pill */
+  .warning-pill {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #F3F4F6;
+    border-radius: 20px;
+    padding: 8px 16px;
+    white-space: nowrap;
+  }
+
+  .warning-pill-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #6B7280;
   }
 </style>
