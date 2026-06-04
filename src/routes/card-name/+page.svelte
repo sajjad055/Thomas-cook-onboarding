@@ -6,6 +6,7 @@
   import { tweened } from 'svelte/motion';
   import { onMount } from 'svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
+  import BottomSheet from '$lib/components/BottomSheet.svelte';
 
   // Name options from Aadhaar/PAN
   const nameOptions = ['Sajjad S', 'SS'];
@@ -24,19 +25,43 @@
   let showLimit = $state(false);
   let showNameSection = $state(false);
 
+  // Declarations
+  let showDeclarations = $state(false);
+  let declarations = $state([false, false, false, false]);
+  let allChecked = $derived(declarations.every(d => d));
+
+  const declarationTexts = [
+    'I have read and understood the MITC & Key Fact Statement (KFS) for this credit card product.',
+    'I accept the terms and conditions of IOB Bank applicable to the TC Travel Card.',
+    'I acknowledge that Thomas Cook is the co-brand partner for this card, issued in partnership with IOB Bank.',
+    'I consent to sharing my information with IOB Bank and Thomas Cook for the purpose of card issuance and servicing.',
+  ];
+
+  function toggleDeclaration(i: number) {
+    declarations[i] = !declarations[i];
+  }
+
+  function acceptAll() {
+    declarations = [true, true, true, true];
+  }
+
+  async function handleContinueAfterDeclarations() {
+    loading = true;
+    await new Promise(r => setTimeout(r, 600));
+    loading = false;
+    showDeclarations = false;
+    goto(`${base}/personal-details`);
+  }
+
   onMount(() => {
-    // Stagger each element in
     setTimeout(() => showCard = true, 100);
     setTimeout(() => showHeading = true, 400);
     setTimeout(() => { showLimit = true; animatedLimit.set(CREDIT_LIMIT).then(() => { limitPopped = true; }); }, 650);
     setTimeout(() => showNameSection = true, 900);
   });
 
-  async function handleContinue() {
-    loading = true;
-    await new Promise(r => setTimeout(r, 600));
-    loading = false;
-    goto(`${base}/personal-details`);
+  function handleContinue() {
+    showDeclarations = true;
   }
 </script>
 
@@ -150,6 +175,43 @@
   </div>
 
 </div>
+
+<!-- Declarations Bottom Sheet -->
+<BottomSheet bind:open={showDeclarations} title="Accept terms and conditions">
+  <div class="declarations-list">
+    {#each declarationTexts as text, i}
+      <button class="declaration-item" onclick={() => toggleDeclaration(i)}>
+        <div class="checkbox" class:checked={declarations[i]}>
+          {#if declarations[i]}
+            <div class="check-anim">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <rect width="18" height="18" rx="4" fill="#184595"/>
+                <path d="M5.5 9.2L7.8 11.6L12.5 6.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {:else}
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" stroke="#D1D5DB"/>
+            </svg>
+          {/if}
+        </div>
+        <span class="declaration-text">{text}</span>
+      </button>
+    {/each}
+  </div>
+
+  {#snippet footer()}
+    {#if allChecked}
+      <button class="btn-primary-sheet" onclick={handleContinueAfterDeclarations} disabled={loading}>
+        {#if loading}<span class="spinner"></span>{:else}Continue{/if}
+      </button>
+    {:else}
+      <button class="btn-secondary-sheet" onclick={acceptAll}>
+        Accept All
+      </button>
+    {/if}
+  {/snippet}
+</BottomSheet>
 
 <style>
   .screen {
@@ -520,4 +582,86 @@
     border-radius: 50%; animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Declarations */
+  .declarations-list {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #F3F4F6;
+    overflow: hidden;
+  }
+
+  .declaration-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #F3F4F6;
+    cursor: pointer;
+    text-align: left;
+  }
+  .declaration-item:last-child {
+    border-bottom: none;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .declaration-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #111827;
+    flex: 1;
+  }
+
+  .btn-primary-sheet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: #184595;
+    color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-primary-sheet:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
+  .btn-primary-sheet:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
+
+  .btn-secondary-sheet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: transparent;
+    color: #184595;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: 1.5px solid #184595;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-secondary-sheet:active { opacity: 0.85; }
 </style>

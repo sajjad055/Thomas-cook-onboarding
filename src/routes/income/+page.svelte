@@ -51,10 +51,6 @@
 
   function handleStepChange(stepIndex: number, value: string) {
     steps[stepIndex].value = value;
-    // Clear subsequent steps when a previous one changes
-    for (let i = stepIndex + 1; i < steps.length; i++) {
-      steps[i].value = '';
-    }
   }
 
   let allValid = $derived(steps.every(s => s.value !== ''));
@@ -97,7 +93,7 @@
 
   <!-- ── FORM ── -->
   <div class="form-area">
-    <ProgressiveInputStepper {steps} onchange={handleStepChange} />
+    <ProgressiveInputStepper {steps} onchange={handleStepChange} mode="dependent" />
   </div>
 
   <div class="spacer"></div>

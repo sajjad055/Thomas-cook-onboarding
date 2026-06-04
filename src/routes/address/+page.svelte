@@ -45,7 +45,11 @@
     loading = true;
     await new Promise(r => setTimeout(r, 400));
     loading = false;
-    goto(`${base}/vkyc`);
+    if (nomineeChoice === 'yes') {
+      goto(`${base}/nominee`);
+    } else {
+      goto(`${base}/vkyc`);
+    }
   }
 </script>
 
@@ -444,7 +448,7 @@
 </style>
 
 <!-- ── NOMINEE BOTTOM SHEET ── -->
-<BottomSheet bind:open={showNomineeSheet} title="Do you want to add a nominee for your FD?">
+<BottomSheet bind:open={showNomineeSheet} title="Do you want to add a nominee?">
 
   <div class="nw-list">
 

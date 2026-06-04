@@ -374,7 +374,10 @@
     gap: 10px;
     padding: 12px 0;
     background: #F9FAFB;
-    border-radius: 8px;
+    border-radius: 0;
+    width: 100%;
+    margin: 0 -12px;
+    width: calc(100% + 24px);
   }
 
   .sub-line {

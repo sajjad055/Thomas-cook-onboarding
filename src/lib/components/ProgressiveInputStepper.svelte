@@ -13,9 +13,11 @@
   let {
     steps = [],
     onchange = () => {},
+    mode = 'dependent',
   }: {
     steps: { label: string; type?: 'chips' | 'text'; options?: string[]; placeholder?: string; value: string }[];
     onchange?: (stepIndex: number, value: string) => void;
+    mode?: 'dependent' | 'independent';
   } = $props();
 
   // Which step is currently active (expanded)
@@ -40,11 +42,17 @@
   }
 
   function editStep(stepIndex: number) {
-    // Clear this step and all subsequent steps
-    for (let i = stepIndex; i < steps.length; i++) {
-      onchange(i, '');
+    if (mode === 'dependent') {
+      // Clear this step and all subsequent
+      for (let i = stepIndex; i < steps.length; i++) {
+        onchange(i, '');
+      }
+      textInputValue = '';
+    } else {
+      // Only clear the edited step
+      onchange(stepIndex, '');
+      textInputValue = '';
     }
-    textInputValue = '';
   }
 </script>
 
@@ -54,9 +62,9 @@
     {@const isCompleted = step.value !== ''}
     {@const isActive = i === activeStep}
     {@const isLocked = i > activeStep && activeStep !== -1}
-    {@const isVisible = i <= (activeStep === -1 ? steps.length - 1 : activeStep)}
+    {@const isVisible = mode === 'independent' || i <= (activeStep === -1 ? steps.length - 1 : activeStep) || isCompleted}
 
-    {#if isVisible || isCompleted}
+    {#if isVisible}
       <div class="step" class:completed={isCompleted} class:active={isActive} class:locked={isLocked}>
         <!-- Step indicator + connector -->
         <div class="step-left">

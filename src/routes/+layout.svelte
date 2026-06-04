@@ -22,6 +22,8 @@
     '/verification': 7,
     '/card-name': 8,
     '/personal-details': 9,
+    '/email': 9.5,
+    '/email/otp': 9.6,
     '/address': 10,
     '/nominee': 11,
     '/vkyc': 12,

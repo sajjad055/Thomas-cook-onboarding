@@ -2,49 +2,49 @@
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
   import StatusBar from '$lib/components/StatusBar.svelte';
-  import TextField from '$lib/components/TextField.svelte';
-  import BottomSheet from '$lib/components/BottomSheet.svelte';
-
-  // Marital status
-  let maritalStatus = $state<'married' | 'single' | null>('single');
-
-  // Father / Spouse toggle
-  let nameOf = $state<'father' | 'spouse'>('father');
-
-  // Field values
-  let parentName = $state('');
-  let motherName = $state('');
-  let netWorth = $state('');
+  import ProgressiveInputStepper from '$lib/components/ProgressiveInputStepper.svelte';
 
   let loading = $state(false);
-  let showNetWorthSheet = $state(false);
 
-  const netWorthOptions = [
-    '₹2 to 5 lakhs',
-    '₹5 to 10 lakhs',
-    '₹10 to 25 lakhs',
-    '₹25 to 50 lakhs',
-    '₹50 lakhs to 1 crore',
-    'Above ₹1 crore',
-  ];
+  let steps = $state([
+    {
+      label: 'Marital status',
+      type: 'chips',
+      options: ['Single', 'Married'],
+      value: ''
+    },
+    {
+      label: "Father's name",
+      type: 'text',
+      placeholder: "Enter father's name",
+      value: ''
+    },
+    {
+      label: "Mother's maiden name",
+      type: 'text',
+      placeholder: "Enter mother's maiden name",
+      value: ''
+    },
+    {
+      label: 'Community',
+      type: 'chips',
+      options: ['General', 'OBC', 'SC', 'ST', 'Other'],
+      value: ''
+    }
+  ]);
 
-  function selectNetWorth(val: string) {
-    netWorth = val;
-    showNetWorthSheet = false;
+  function handleStepChange(stepIndex: number, value: string) {
+    steps[stepIndex].value = value;
   }
 
-  let allValid = $derived(
-    maritalStatus !== null &&
-    parentName.trim().length > 0 &&
-    motherName.trim().length > 0
-  );
+  let allValid = $derived(steps.every(s => s.value !== ''));
 
   async function handleSubmit() {
     if (!allValid) return;
     loading = true;
     await new Promise(r => setTimeout(r, 600));
     loading = false;
-    goto(`${base}/address`);
+    goto(`${base}/email`);
   }
 </script>
 
@@ -77,71 +77,7 @@
 
   <!-- ── FORM ── -->
   <div class="form-area">
-
-    <!-- Marital status -->
-    <div class="section marital-section">
-      <div class="marital-row">
-
-        <!-- Married -->
-        <button
-          class="marital-option"
-          class:selected={maritalStatus === 'married'}
-          onclick={() => maritalStatus = 'married'}
-        >
-          <div class="radio-check" class:checked={maritalStatus === 'married'}>
-            {#if maritalStatus === 'married'}
-              <div class="check-anim">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                  <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            {/if}
-          </div>
-          <span class="marital-label">I am Married</span>
-        </button>
-
-        <!-- Single -->
-        <button
-          class="marital-option"
-          class:selected={maritalStatus === 'single'}
-          onclick={() => maritalStatus = 'single'}
-        >
-          <div class="radio-check" class:checked={maritalStatus === 'single'}>
-            {#if maritalStatus === 'single'}
-              <div class="check-anim">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                  <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            {/if}
-          </div>
-          <span class="marital-label">I am Single</span>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Father's name -->
-    <div class="section">
-      <TextField
-        label="Father's name"
-        bind:value={parentName}
-        placeholder="Enter name"
-      />
-    </div>
-
-    <!-- Mother's maiden name -->
-    <div class="section">
-      <TextField
-        label="Mother's maiden name"
-        bind:value={motherName}
-        placeholder="Enter name"
-        supportText="What is mother's maiden name? <a href='#'>Know more</a>"
-      />
-    </div>
-
+    <ProgressiveInputStepper {steps} onchange={handleStepChange} mode="independent" />
   </div>
 
   <div class="spacer"></div>
@@ -162,33 +98,6 @@
   </div>
 
 </div>
-
-<!-- ── NET WORTH BOTTOM SHEET ── -->
-<BottomSheet bind:open={showNetWorthSheet} title="Select your net worth">
-  <div class="nw-list">
-    {#each netWorthOptions as opt, i}
-      <button
-        class="nw-item"
-        onclick={() => selectNetWorth(opt)}
-      >
-        <span class="nw-text">{opt}</span>
-        <div class="nw-radio" class:checked={netWorth === opt}>
-          {#if netWorth === opt}
-            <div class="check-anim">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#15803D"/>
-                <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          {/if}
-        </div>
-      </button>
-      {#if i < netWorthOptions.length - 1}
-        <div class="nw-divider"></div>
-      {/if}
-    {/each}
-  </div>
-</BottomSheet>
 
 <style>
   .screen {
@@ -253,7 +162,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 24px 0 0;
+    padding: 24px 16px 0;
     flex-shrink: 0;
   }
 

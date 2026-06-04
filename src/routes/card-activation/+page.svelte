@@ -19,6 +19,7 @@
   let showStep2 = $state(false);
   let showStep3 = $state(false);
   let showInfo = $state(false);
+  let lineProgress = $state(0); // 0 to 100, animates the line between step 1 and 2
 
   // Generate confetti — using Lottie
 
@@ -35,15 +36,26 @@
       showConfetti = false;
       phase = 'reveal';
 
-      // Cascade content after card moves up
+      // Cascade content smoothly
       setTimeout(() => showHeading = true, 600);
-      setTimeout(() => showSteps = true, 900);
-      setTimeout(() => showStep1 = true, 1100);
-      setTimeout(() => showStep1Check = true, 1500);
-      setTimeout(() => showStep1Line = true, 1900);
-      setTimeout(() => showStep2 = true, 2300);
-      setTimeout(() => showStep3 = true, 2900);
-      setTimeout(() => showInfo = true, 3300);
+      setTimeout(() => {
+        showSteps = true;
+        showStep1 = true;
+        showStep2 = true;
+        showStep3 = true;
+      }, 1000);
+      // After stepper loads, tick step 1 and animate progress line
+      setTimeout(() => showStep1Check = true, 2000);
+      setTimeout(() => {
+        showStep1Line = true;
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 3;
+          lineProgress = progress;
+          if (progress >= 50) clearInterval(interval);
+        }, 30);
+      }, 2400);
+      setTimeout(() => showInfo = true, 3200);
     }, 1500);
   });
 </script>
@@ -58,7 +70,11 @@
   <!-- Rotating bg lighting — moves with the card -->
   <div class="bg-card-group" class:centered={phase === 'intro'} class:settled={phase === 'reveal'}>
     <img src="{base}/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
-    <img src="{base}/dcb-payless-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+    <div class="card-float-wrap">
+      <img src="{base}/tc-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+      <span class="card-name-overlay">SAJJAD S</span>
+    </div>
+    <div class="card-shadow-element"></div>
   </div>
 
   <!-- Confetti burst during intro -->
@@ -102,60 +118,47 @@
       <div class="steps-area" in:fade={{ duration: 400 }}>
         <div class="steps-card">
 
-          <div class="stepper">
+          <div class="h-stepper">
 
-            <!-- Step 1: Completed -->
+            <!-- Step 1: Done -->
             {#if showStep1}
-              <div class="stepper-item" in:fade={{ duration: 400 }}>
-                <div class="stepper-rail">
+              <div class="h-step h-step-done" in:fade={{ duration: 400 }}>
+                <div class="h-step-top">
+                  <div class="h-line h-line-invisible"></div>
                   {#if showStep1Check}
-                    <div class="stepper-icon stepper-icon-success check-pop-in">
-                      <i class="ph ph-check" style="font-size:14px; color:#FFFFFF"></i>
+                    <div class="h-dot h-dot-done check-pop-in">
+                      <i class="ph ph-check" style="font-size:10px; color:#FFFFFF"></i>
                     </div>
                   {:else}
-                    <div class="stepper-icon stepper-icon-pending">
-                      <span class="stepper-dot"></span>
-                    </div>
+                    <div class="h-dot h-dot-pending"></div>
                   {/if}
-                  {#if showStep1Line}
-                    <div class="stepper-line stepper-line-success line-grow"></div>
-                  {/if}
+                  <div class="h-line h-line-animated" style="background: linear-gradient(90deg, #15803D {lineProgress}%, #E5E7EB {lineProgress}%)"></div>
                 </div>
-                <div class="stepper-content">
-                  <p class="step-title">Video KYC approval</p>
-                  <p class="step-desc">Your verification with the bank agent</p>
-                </div>
+                <p class="h-step-label">Video KYC</p>
               </div>
             {/if}
 
             <!-- Step 2: Pending -->
             {#if showStep2}
-              <div class="stepper-item" in:fade={{ duration: 500 }}>
-                <div class="stepper-rail">
-                  <div class="stepper-icon stepper-icon-pending">
-                    <span class="stepper-dot"></span>
-                  </div>
-                  <div class="stepper-line stepper-line-pending"></div>
+              <div class="h-step">
+                <div class="h-step-top">
+                  <div class="h-line h-line-pending"></div>
+                  <div class="h-dot h-dot-pending"></div>
+                  <div class="h-line h-line-pending"></div>
                 </div>
-                <div class="stepper-content">
-                  <p class="step-title">Bank verification</p>
-                  <p class="step-desc">Bank will verify your details and initiate FD and card creation</p>
-                </div>
+                <p class="h-step-label">Bank verification</p>
               </div>
             {/if}
 
             <!-- Step 3: Pending -->
             {#if showStep3}
-              <div class="stepper-item" in:fade={{ duration: 500 }}>
-                <div class="stepper-rail">
-                  <div class="stepper-icon stepper-icon-pending">
-                    <span class="stepper-dot"></span>
-                  </div>
+              <div class="h-step">
+                <div class="h-step-top">
+                  <div class="h-line h-line-pending"></div>
+                  <div class="h-dot h-dot-pending"></div>
+                  <div class="h-line h-line-invisible"></div>
                 </div>
-                <div class="stepper-content">
-                  <p class="step-title">Card setup</p>
-                  <p class="step-desc">You will get a credit card and an FD of ₹25,000. <strong>You will be notified via SMS/email when your card is created</strong></p>
-                </div>
+                <p class="h-step-label">Card setup</p>
               </div>
             {/if}
 
@@ -172,12 +175,7 @@
 
     <!-- Info box -->
     {#if showInfo}
-      <div class="info-box" in:fade={{ duration: 400 }}>
-        <i class="ph ph-info" style="font-size:24px; color:#6B7280; flex-shrink:0"></i>
-        <p class="info-text">
-          <strong>Incase of a verification failure, your money will be refunded back to your source account within 48-72 hours</strong>
-        </p>
-      </div>
+      <div class="spacer-bottom"></div>
     {/if}
 
   {/if}
@@ -204,7 +202,7 @@
     left: -139px;
     top: -93px;
     border-radius: 50%;
-    background: linear-gradient(90deg, #FFEEEE 0%, #DDEFBB 100%);
+    background: linear-gradient(90deg, #D6E4FF 0%, #E8F0FF 100%);
     filter: blur(25.6px);
     pointer-events: none;
     z-index: 0;
@@ -220,6 +218,7 @@
     top: 0;
     z-index: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     will-change: transform, opacity;
@@ -228,7 +227,7 @@
 
   /* Phase 1: centered vertically */
   .bg-card-group.centered {
-    transform: translateY(calc(400px - 161px));
+    transform: translateY(calc(50vh - 161px));
     opacity: 1;
   }
 
@@ -247,20 +246,67 @@
     user-select: none;
     transform-origin: center center;
     animation: bgRotate 30s linear infinite;
+    filter: saturate(0) brightness(1.8);
   }
   @keyframes bgRotate {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
   }
 
+  .card-float-wrap {
+    position: relative;
+    width: 346px;
+    height: 230px;
+    animation: cardFloat 3.5s ease-in-out infinite;
+    z-index: 1;
+    margin: 0 auto;
+  }
+
   .card-img {
-    width: 258px;
-    height: auto;
+    width: 346px;
+    height: 230px;
     display: block;
     user-select: none;
     pointer-events: none;
+  }
+
+  .card-name-overlay {
+    position: absolute;
+    left: 97px;
+    top: 160px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 1.32;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.9);
+    pointer-events: none;
+    user-select: none;
+    transform: rotate(15.7deg);
+    transform-origin: left center;
+    z-index: 2;
+  }
+
+  .card-shadow-element {
+    width: 160px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 48, 129, 0.3);
+    filter: blur(4px);
+    margin: 16px auto 0;
+    animation: shadowScale 3.5s ease-in-out infinite;
     position: relative;
-    z-index: 1;
+    z-index: 2;
+  }
+
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  @keyframes shadowScale {
+    0%, 100% { transform: scaleX(1); opacity: 0.7; }
+    50% { transform: scaleX(0.55); opacity: 0.2; }
   }
 
   /* ── Top bar ── */
@@ -285,7 +331,7 @@
 
   /* Spacer to account for the card area at top */
   .card-spacer {
-    height: 288px;
+    height: 320px;
     flex-shrink: 0;
   }
 
@@ -300,6 +346,7 @@
     margin-top: 16px;
     position: relative;
     z-index: 1;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
   }
 
   /* ── Steps ── */
@@ -312,12 +359,13 @@
   }
 
   .steps-card {
-    background: #FFFCF4;
+    background: #FFFFFF;
+    border: 0.5px solid #D1D5DB;
     border-radius: 8px;
-    padding: 44px 12px 16px;
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
     position: relative;
     overflow: visible;
   }
@@ -350,8 +398,86 @@
     justify-content: center;
     flex-shrink: 0;
   }
-  .stepper-icon-success { background: #15803D; }
-  .stepper-icon-pending { background: #E5E7EB; }
+  /* ── Horizontal line stepper ── */
+  .h-stepper {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .h-stepper::-webkit-scrollbar { display: none; }
+
+  .h-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+    flex: 1;
+  }
+
+  .h-step-top {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .h-line {
+    flex: 1;
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  .h-line-done {
+    background: #15803D;
+  }
+
+  .h-line-pending {
+    background: #E5E7EB;
+  }
+
+  .h-line-invisible {
+    background: transparent;
+  }
+
+  .h-line-animated {
+    flex: 1;
+    height: 2px;
+    border-radius: 1px;
+    transition: background 0.1s ease;
+  }
+
+  .h-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .h-dot-done {
+    background: #15803D;
+  }
+
+  .h-dot-pending {
+    background: #E5E7EB;
+  }
+
+  .h-step-label {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: #111827;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .h-step-done .h-step-label {
+    color: #15803D;
+  }
 
   .check-pop-in {
     animation: checkIconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -423,13 +549,11 @@
 
   /* Processing badge */
   .processing-badge {
-    position: absolute;
-    top: -2px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    align-self: center;
     background: linear-gradient(98deg, #0D0D0D 0%, #414141 100%);
     border: 1px solid #D1D5DB;
-    border-radius: 0 0 16px 16px;
+    border-radius: 20px;
     padding: 6px 12px;
     white-space: nowrap;
   }
