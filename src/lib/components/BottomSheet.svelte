@@ -188,7 +188,7 @@
   /* ── Footer slot ── */
   .sheet-footer {
     background: #F9FAFB;
-    padding: 20px 16px;
+    padding: 20px 16px calc(24px + env(safe-area-inset-bottom));
     flex-shrink: 0;
     display: flex;
     flex-direction: column;

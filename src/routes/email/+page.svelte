@@ -206,7 +206,7 @@
 
   .footer {
     position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    padding: 16px 16px calc(40px + env(safe-area-inset-bottom));
     background: #FFFCF4; flex-shrink: 0;
   }
 

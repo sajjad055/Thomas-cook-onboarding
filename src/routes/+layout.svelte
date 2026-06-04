@@ -12,7 +12,7 @@
 
   // Track navigation direction based on route order
   const routeOrder: Record<string, number> = {
-    '/existing-customer': 1,
+    '/landing': 1,
     '/mobile': 2,
     '/mobile/otp': 3,
     '/aadhaar': 4,
@@ -72,7 +72,8 @@
     width: 100%;
     min-height: 100dvh;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     margin: 0 auto;
   }
 
@@ -83,6 +84,7 @@
     top: 0;
     left: 0;
     will-change: transform;
+    overflow-y: auto;
   }
 
 </style>

@@ -221,7 +221,7 @@
 
   .spacer { flex: 1; }
 
-  .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 0 16px; flex-shrink: 0; }
+  .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 0 24px; flex-shrink: 0; }
   .consent-row { display: flex; align-items: flex-start; gap: 8px; padding: 0 16px; }
   .checkbox {
     width: 24px; height: 24px; background: none; border: none;

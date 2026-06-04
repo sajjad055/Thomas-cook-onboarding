@@ -379,7 +379,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 20px 0 calc(16px + env(safe-area-inset-bottom));
+    padding: 20px 0 calc(40px + env(safe-area-inset-bottom));
     flex-shrink: 0;
     background: #FFFCF4;
   }
