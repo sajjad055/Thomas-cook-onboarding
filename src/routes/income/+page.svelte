@@ -1,16 +1,26 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { base } from '$app/paths';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
+  import { fade, scale } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import { browser } from '$app/environment';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import ProgressiveInputStepper from '$lib/components/ProgressiveInputStepper.svelte';
   import ToastMessage from '$lib/components/ToastMessage.svelte';
+  import BottomSheet from '$lib/components/BottomSheet.svelte';
+
+  let lottieReady = $state(false);
 
   let showToast = $state(false);
 
   onMount(() => {
     showToast = true;
     setTimeout(() => { showToast = false; }, 2000);
+    if (browser) {
+      import('@lottiefiles/dotlottie-wc').catch(() => {});
+    }
+    lottieReady = true;
   });
 
   // Stepper steps
@@ -48,19 +58,121 @@
   ]);
 
   let loading = $state(false);
+  let agreed = $state(false);
+  let allValid = $derived(steps.every(s => s.value !== ''));
 
   function handleStepChange(stepIndex: number, value: string) {
     steps[stepIndex].value = value;
   }
 
-  let allValid = $derived(steps.every(s => s.value !== ''));
+  // OTP bottom sheet
+  let showOtpSheet = $state(false);
+  let otp = $state(['', '', '', '', '', '']);
+  let otpInputs: HTMLInputElement[] = $state([]);
+  let otpError = $state('');
+  let otpLoading = $state(false);
+  let resendSeconds = $state(30);
+  let canResend = $state(false);
+  let timerInterval: ReturnType<typeof setInterval>;
+
+  function startTimer() {
+    resendSeconds = 30;
+    canResend = false;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      resendSeconds--;
+      if (resendSeconds <= 0) {
+        clearInterval(timerInterval);
+        canResend = true;
+      }
+    }, 1000);
+  }
+
+  function openOtpSheet() {
+    if (!allValid || !agreed) return;
+    otp = ['', '', '', '', '', ''];
+    otpError = '';
+    showOtpSheet = true;
+    startTimer();
+    setTimeout(() => otpInputs[0]?.focus(), 300);
+  }
+
+  function handleOtpInput(i: number, e: Event) {
+    const val = (e.target as HTMLInputElement).value.replace(/\D/g, '');
+    if (!val) return;
+    otp[i] = val.slice(-1);
+    otpError = '';
+    if (i < 5) otpInputs[i + 1]?.focus();
+  }
+
+  function handleOtpKeydown(i: number, e: KeyboardEvent) {
+    if (e.key === 'Backspace') {
+      if (otp[i]) { otp[i] = ''; }
+      else if (i > 0) { otp[i - 1] = ''; otpInputs[i - 1]?.focus(); }
+    }
+  }
+
+  function handleOtpPaste(e: ClipboardEvent) {
+    e.preventDefault();
+    const text = e.clipboardData?.getData('text').replace(/\D/g, '').slice(0, 6) ?? '';
+    text.split('').forEach((ch, i) => { otp[i] = ch; });
+    otpInputs[Math.min(text.length, 5)]?.focus();
+  }
+
+  let isOtpComplete = $derived(otp.every(d => d !== ''));
+
+  // Bank fetch sheet
+  let showBankSheet = $state(false);
+  type BankFetchState = 'loading' | 'success' | 'accounts';
+  let bankFetchState = $state<BankFetchState>('loading');
+
+  const mockBankAccounts = [
+    { id: 1, accountNumber: '************1100', branch: 'Bommanhalli branch', logo: 'bank-sbi.png' },
+    { id: 2, accountNumber: '************2345', branch: 'Marathahalli branch', logo: 'bank-kotak.png' },
+  ];
+
+  let selectedBankId = $state<number | null>(null);
+
+  async function handleOtpVerify() {
+    if (!isOtpComplete) return;
+    otpLoading = true;
+    await new Promise(r => setTimeout(r, 600));
+    otpLoading = false;
+    showOtpSheet = false;
+    clearInterval(timerInterval);
+
+    // Open bank fetch sheet in loading state
+    bankFetchState = 'loading';
+    showBankSheet = true;
+
+    // Simulate fetching (~3.5s so the rocket loader is clearly visible)
+    await new Promise(r => setTimeout(r, 3500));
+    bankFetchState = 'success';
+
+    // Show success lottie long enough to complete (~2.5s)
+    await new Promise(r => setTimeout(r, 2500));
+
+    // Smart-animate effect: close the sheet, swap state, then reopen
+    // so the BottomSheet's fly-up animation replays for the accounts view
+    showBankSheet = false;
+    await new Promise(r => setTimeout(r, 320)); // wait for out animation
+    bankFetchState = 'accounts';
+    await new Promise(r => setTimeout(r, 60));  // small breathing pause
+    showBankSheet = true;
+  }
+
+  function handleResend() {
+    if (!canResend) return;
+    otp = ['', '', '', '', '', ''];
+    otpError = '';
+    startTimer();
+    otpInputs[0]?.focus();
+  }
+
+  onDestroy(() => clearInterval(timerInterval));
 
   async function handleSubmit() {
-    if (!allValid) return;
-    loading = true;
-    await new Promise(r => setTimeout(r, 600));
-    loading = false;
-    goto(`${base}/verification`);
+    openOtpSheet();
   }
 </script>
 
@@ -100,15 +212,34 @@
 
   <!-- ── FOOTER ── -->
   <div class="footer">
+    <!-- Consent -->
+    <div class="consent-row">
+      <button class="checkbox" class:checked={agreed} onclick={() => agreed = !agreed} aria-label="Agree to terms">
+        {#if agreed}
+          <div class="check-anim">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect width="18" height="18" rx="4" fill="#184595"/>
+              <path d="M5.5 9.2L7.8 11.6L12.5 6.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        {:else}
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" stroke="#D1D5DB"/>
+          </svg>
+        {/if}
+      </button>
+      <p class="consent-text">I agree to IOB Bank to verify my income details through my bank account.</p>
+    </div>
+
     <button
       class="btn-primary"
-      disabled={!allValid || loading}
+      disabled={!allValid || !agreed || loading}
       onclick={handleSubmit}
     >
       {#if loading}
         <span class="spinner"></span>
       {:else}
-        Submit & continue
+        Confirm with OTP
       {/if}
     </button>
   </div>
@@ -119,6 +250,154 @@
   </div>
 
 </div>
+
+<!-- Bank Fetch Bottom Sheet -->
+<BottomSheet bind:open={showBankSheet} title={bankFetchState === 'accounts' ? 'Continue to verify your income details' : ''}>
+
+  {#if bankFetchState === 'loading' || bankFetchState === 'success'}
+    <!-- Loading / Success card -->
+    <div class="bank-status-card">
+      {#if bankFetchState === 'loading'}
+        <div class="bank-status-inner" in:fade={{ duration: 200 }}>
+          <!-- Rocket loader (same as verification screen) -->
+          <div class="bank-rocket-wrap">
+            <div class="longfazers">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="loader-center">
+              <div class="loader">
+                <span>
+                  <span></span><span></span><span></span><span></span>
+                </span>
+                <div class="base">
+                  <span></span>
+                  <div class="face"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="bank-status-text">Fetching your bank details...</p>
+        </div>
+      {:else}
+        <div class="bank-status-inner" in:fade={{ duration: 300 }}>
+          {#if lottieReady}
+            <dotlottie-wc
+              src="{base}/success.lottie"
+              autoplay
+              speed="0.7"
+              style="width: 80px; height: 80px;"
+            ></dotlottie-wc>
+          {/if}
+          <p class="bank-status-text bank-status-success">Bank details fetched!</p>
+        </div>
+      {/if}
+    </div>
+
+  {:else if bankFetchState === 'accounts'}
+    <!-- Account list -->
+    <div class="bank-accounts-list" in:fade={{ duration: 200 }}>
+
+      <!-- Section header -->
+      <div class="bank-section-header">
+        <div class="bank-section-line"></div>
+        <span class="bank-section-label">Your bank accounts</span>
+        <div class="bank-section-line"></div>
+      </div>
+
+      <!-- Accounts container + info bar wrapped together -->
+      <div class="bank-accounts-wrapper">
+        <div class="bank-accounts-container">
+          {#each mockBankAccounts as account, i}
+            <button
+              class="bank-account-item"
+              class:bank-account-selected={selectedBankId === account.id}
+              onclick={() => selectedBankId = account.id}
+            >
+              <div class="bank-account-info">
+                <p class="bank-account-number">{account.accountNumber}</p>
+                <p class="bank-account-branch">{account.branch}</p>
+              </div>
+              <img src="{base}/{account.logo}" alt="Bank logo" class="bank-logo-img" />
+            </button>
+            {#if i < mockBankAccounts.length - 1}
+              <div class="bank-divider"></div>
+            {/if}
+          {/each}
+        </div>
+
+        <!-- Info bar -->
+        <div class="bank-info-bar">
+          <p class="bank-info-text">We are verifying your income details to give you the best credit limit</p>
+        </div>
+      </div>
+
+    </div>
+  {/if}
+
+  {#snippet footer()}
+    {#if bankFetchState === 'accounts'}
+      <button
+        class="bank-confirm-btn"
+        disabled={false}
+        onclick={() => goto(`${base}/bank-check`)}
+        in:fade={{ duration: 150 }}
+      >
+        Continue
+      </button>
+    {/if}
+  {/snippet}
+</BottomSheet>
+<BottomSheet bind:open={showOtpSheet} title="Enter OTP">
+  <div class="otp-sheet-content">
+    <p class="otp-subtitle">Enter OTP sent to your mobile number</p>
+
+    <div class="otp-row" onpaste={handleOtpPaste}>
+      {#each otp as digit, i}
+        <div class="otp-box" class:filled={!!digit} class:has-error={!!otpError}>
+          <input
+            bind:this={otpInputs[i]}
+            type="tel"
+            inputmode="numeric"
+            maxlength="1"
+            value={digit}
+            oninput={(e) => handleOtpInput(i, e)}
+            onkeydown={(e) => handleOtpKeydown(i, e)}
+            class="otp-input"
+            aria-label="OTP digit {i + 1}"
+          />
+        </div>
+      {/each}
+    </div>
+
+    {#if otpError}
+      <p class="otp-error" in:fade={{ duration: 150 }}>{otpError}</p>
+    {/if}
+
+    <div class="resend-row">
+      {#if canResend}
+        <button class="resend-btn" onclick={handleResend}>
+          Not received? <span class="resend-link">Resend OTP</span>
+        </button>
+      {:else}
+        <p class="resend-text">Resend OTP in {resendSeconds}s</p>
+      {/if}
+    </div>
+  </div>
+
+  {#snippet footer()}
+    <button
+      class="otp-verify-btn"
+      disabled={!isOtpComplete || otpLoading}
+      onclick={handleOtpVerify}
+    >
+      {#if otpLoading}
+        <span class="spinner"></span>
+      {:else}
+        Continue
+      {/if}
+    </button>
+  {/snippet}
+</BottomSheet>
 
 <style>
   .screen {
@@ -132,7 +411,7 @@
 
   .toast-position {
     position: fixed;
-    bottom: 90px;
+    bottom: 120px;
     left: 16px;
     right: 16px;
     z-index: 100;
@@ -318,6 +597,9 @@
     padding: 16px 16px calc(40px + env(safe-area-inset-bottom));
     background: #FFFCF4;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .btn-primary {
@@ -331,10 +613,368 @@
   .btn-primary:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
   .btn-primary:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
 
+  /* Consent */
+  .consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .checkbox {
+    width: 24px; height: 24px; background: none; border: none;
+    cursor: pointer; padding: 3px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-anim {
+    animation: checkPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+  }
+  @keyframes checkPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .consent-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6B7280;
+  }
+
   .spinner {
     width: 20px; height: 20px;
     border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #FFFFFF;
     border-radius: 50%; animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* OTP Sheet */
+  .otp-sheet-content {
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  .otp-subtitle {
+    font-family: 'Nunito Sans', sans-serif; font-weight: 400; font-size: 12px;
+    color: #6B7280; line-height: 1.5; text-align: left;
+    margin-top: -20px; margin-bottom: 24px;
+  }
+
+  .otp-row {
+    display: flex; gap: 8px; width: 100%;
+  }
+
+  .otp-box {
+    flex: 1; height: 52px; background: #FFFFFF;
+    border: 1px solid #D1D5DB; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .otp-box.filled { border-color: #D1D5DB; }
+  .otp-box.has-error { border-color: #B91C1C; }
+
+  .otp-input {
+    width: 100%; height: 100%; background: none; border: none; outline: none;
+    text-align: center; font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600; font-size: 16px; color: #111827; caret-color: #184595;
+  }
+
+  .resend-row {
+    display: flex; justify-content: center; align-items: center;
+    margin-top: 16px;
+  }
+
+  .resend-text {
+    font-family: 'Nunito Sans', sans-serif; font-weight: 400;
+    font-size: 13px; color: #6B7280;
+  }
+
+  .resend-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: 'Nunito Sans', sans-serif; font-weight: 400;
+    font-size: 13px; color: #6B7280;
+  }
+
+  .resend-link {
+    color: #184595; font-weight: 600; text-decoration: underline;
+  }
+
+  .otp-error {
+    font-family: 'Nunito Sans', sans-serif; font-size: 12px;
+    color: #B91C1C; text-align: center;
+  }
+
+  .otp-verify-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 48px; background: #184595; color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 16px;
+    border: none; border-radius: 8px; cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A; transition: opacity 0.15s, transform 0.1s;
+  }
+  .otp-verify-btn:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
+  .otp-verify-btn:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
+
+  /* ── Bank Fetch Sheet ── */
+  .bank-status-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 32px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .bank-status-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  :global(.bank-rocket-wrap) {
+    position: relative;
+    width: 100%;
+    height: 60px;
+  }
+
+  :global(.bank-rocket-wrap .longfazers) {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  :global(.bank-rocket-wrap .longfazers span) {
+    position: absolute;
+    height: 2px;
+    width: 20%;
+    background: rgba(24, 69, 149, 0.15);
+  }
+  :global(.bank-rocket-wrap .longfazers span:nth-child(1)) { top: 20%; animation: lf 0.6s linear infinite; animation-delay: -5s; }
+  :global(.bank-rocket-wrap .longfazers span:nth-child(2)) { top: 40%; animation: lf2 0.8s linear infinite; animation-delay: -1s; }
+  :global(.bank-rocket-wrap .longfazers span:nth-child(3)) { top: 60%; animation: lf3 0.6s linear infinite; }
+  :global(.bank-rocket-wrap .longfazers span:nth-child(4)) { top: 80%; animation: lf4 0.5s linear infinite; animation-delay: -3s; }
+
+  @keyframes lf  { 0% { left: 200%; } 100% { left: -200%; opacity: 0; } }
+  @keyframes lf2 { 0% { left: 200%; } 100% { left: -200%; opacity: 0; } }
+  @keyframes lf3 { 0% { left: 200%; } 100% { left: -100%; opacity: 0; } }
+  @keyframes lf4 { 0% { left: 200%; } 100% { left: -100%; opacity: 0; } }
+
+  :global(.bank-rocket-wrap .loader-center) {
+    width: 100%;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global(.bank-rocket-wrap .loader) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -65px;
+    margin-top: -10px;
+    animation: speeder 0.4s linear infinite;
+  }
+  :global(.bank-rocket-wrap .loader > span) {
+    height: 5px; width: 35px; background: #184595;
+    position: absolute; top: -19px; left: 60px;
+    border-radius: 2px 10px 1px 0;
+  }
+  :global(.bank-rocket-wrap .base span) {
+    position: absolute; width: 0; height: 0;
+    border-top: 6px solid transparent;
+    border-right: 100px solid #184595;
+    border-bottom: 6px solid transparent;
+  }
+  :global(.bank-rocket-wrap .base span::before) {
+    content: ""; height: 22px; width: 22px;
+    border-radius: 50%; background: #184595;
+    position: absolute; right: -110px; top: -16px;
+  }
+  :global(.bank-rocket-wrap .base span::after) {
+    content: ""; position: absolute; width: 0; height: 0;
+    border-top: 0 solid transparent;
+    border-right: 55px solid #184595;
+    border-bottom: 16px solid transparent;
+    top: -16px; right: -98px;
+  }
+  :global(.bank-rocket-wrap .face) {
+    position: absolute; height: 12px; width: 20px;
+    background: #184595; border-radius: 20px 20px 0 0;
+    transform: rotate(-40deg); right: -125px; top: -15px;
+  }
+  :global(.bank-rocket-wrap .face::after) {
+    content: ""; height: 12px; width: 12px; background: #184595;
+    right: 4px; top: 7px; position: absolute;
+    transform: rotate(40deg); transform-origin: 50% 50%;
+    border-radius: 0 0 0 2px;
+  }
+  :global(.bank-rocket-wrap .loader > span > span) {
+    width: 30px; height: 1px; background: #184595;
+    position: absolute; animation: fazer1 0.2s linear infinite;
+  }
+  :global(.bank-rocket-wrap .loader > span > span:nth-child(2)) { top: 3px; animation: fazer2 0.4s linear infinite; }
+  :global(.bank-rocket-wrap .loader > span > span:nth-child(3)) { top: 1px; animation: fazer3 0.4s linear infinite; animation-delay: -1s; }
+  :global(.bank-rocket-wrap .loader > span > span:nth-child(4)) { top: 4px; animation: fazer4 1s linear infinite; animation-delay: -1s; }
+
+  @keyframes fazer1 { 0% { left: 0; } 100% { left: -80px; opacity: 0; } }
+  @keyframes fazer2 { 0% { left: 0; } 100% { left: -100px; opacity: 0; } }
+  @keyframes fazer3 { 0% { left: 0; } 100% { left: -50px; opacity: 0; } }
+  @keyframes fazer4 { 0% { left: 0; } 100% { left: -150px; opacity: 0; } }
+  @keyframes speeder {
+    0%   { transform: translate(2px, 1px) rotate(0deg); }
+    10%  { transform: translate(-1px, -3px) rotate(-1deg); }
+    20%  { transform: translate(-2px, 0px) rotate(1deg); }
+    30%  { transform: translate(1px, 2px) rotate(0deg); }
+    40%  { transform: translate(1px, -1px) rotate(1deg); }
+    50%  { transform: translate(-1px, 3px) rotate(-1deg); }
+    60%  { transform: translate(-1px, 1px) rotate(0deg); }
+    70%  { transform: translate(3px, 1px) rotate(-1deg); }
+    80%  { transform: translate(-2px, -1px) rotate(1deg); }
+    90%  { transform: translate(2px, 1px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
+  .bank-status-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #111827;
+    text-align: center;
+  }
+
+  .bank-status-success {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  /* ── Bank Account List ── */
+  .bank-accounts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Section header with gradient lines */
+  .bank-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bank-section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #A3ABBB 0%, rgba(22, 23, 26, 0) 100%);
+    transform: scaleX(-1);
+  }
+  .bank-section-line:last-child {
+    background: linear-gradient(270deg, #A3ABBB 0%, rgba(22, 23, 26, 0) 100%);
+    transform: scaleX(-1);
+  }
+  .bank-section-label {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    color: #6B7280;
+    white-space: nowrap;
+  }
+
+  /* Accounts + info bar wrapper */
+  .bank-accounts-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 0.5px solid #D1D5DB;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* Accounts container with border */
+  .bank-accounts-container {
+    background: #FFFFFF;
+  }
+
+  .bank-account-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.12s;
+  }
+  .bank-account-item:active { background: #F9FAFB; }
+  .bank-account-selected { background: #F0F4FF; }
+
+  .bank-account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .bank-account-number {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #111827;
+  }
+
+  .bank-account-branch {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #6B7280;
+  }
+
+  .bank-logo-img {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .bank-divider {
+    height: 0.5px;
+    background: #D1D5DB;
+    margin: 0 12px;
+  }
+
+  /* Info bar */
+  .bank-info-bar {
+    background: #F0FDF4;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .bank-info-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    color: #15803D;
+    text-align: center;
+  }
+
+  .bank-confirm-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 48px; background: #184595; color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif; font-weight: 600; font-size: 16px;
+    border: none; border-radius: 8px; cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A; transition: opacity 0.15s, transform 0.1s;
+  }
+  .bank-confirm-btn:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
+  .bank-confirm-btn:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
 </style>
