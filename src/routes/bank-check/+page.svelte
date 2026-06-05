@@ -46,8 +46,8 @@
   let isPaused = $state(false);  // game paused after first successful catch
 
   // Hit when card center is within ±halfWindow of track/frame center.
-  // ~22% of frame width gives ~45% win rate at this speed.
-  const HIT_WINDOW_RATIO = 0.22;
+  // ~10% of frame width gives ~30% win rate at this speed.
+  const HIT_WINDOW_RATIO = 0.10;
   const SWEEP_DURATION = 650; // fast horizontal travel
 
   // ── Animation loop ──────────────────────────────────────────────────
@@ -271,7 +271,11 @@
 
     <!-- Caption + coin chip -->
     <div class="game-caption-wrap">
-      <p class="game-caption">While you wait, catch the card in the frame and earn</p>
+      {#if pointsEarned}
+        <p class="game-caption">Bingo! you can continue playing</p>
+      {:else}
+        <p class="game-caption">While you wait, catch the card in the frame and earn</p>
+      {/if}
       <div class="coin-chip">
         <img src="{base}/coin.svg" alt="" class="coin-chip-icon" draggable="false" />
         {#if pointsEarned}

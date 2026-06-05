@@ -165,7 +165,7 @@
 
   .toast-position {
     position: fixed;
-    bottom: 90px;
+    bottom: 120px;
     left: 16px;
     right: 16px;
     z-index: 100;

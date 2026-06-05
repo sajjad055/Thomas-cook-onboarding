@@ -362,7 +362,7 @@
   /* Warning pill */
   .warning-pill {
     position: fixed;
-    bottom: 90px;
+    bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
     background: #F3F4F6;

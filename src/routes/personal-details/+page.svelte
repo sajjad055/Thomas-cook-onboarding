@@ -92,7 +92,7 @@
       {#if loading}
         <span class="spinner"></span>
       {:else}
-        Submit & continue
+        Continue
       {/if}
     </button>
   </div>
