@@ -43,11 +43,12 @@
   let pointsEarned = $state(false);
   let showRewardPopup = $state(false);
   let isPressed = $state(false); // press-and-hold state
+  let isPaused = $state(false);  // game paused after first successful catch
 
   // Hit when card center is within ±halfWindow of track/frame center.
   // ~22% of frame width gives ~45% win rate at this speed.
   const HIT_WINDOW_RATIO = 0.22;
-  const SWEEP_DURATION = 850; // fast horizontal travel
+  const SWEEP_DURATION = 650; // fast horizontal travel
 
   // ── Animation loop ──────────────────────────────────────────────────
   let rafId: number | null = null;
@@ -59,7 +60,7 @@
   function animate(now: number) {
     if (!lastFlipTime) lastFlipTime = now;
 
-    if (isPressed) {
+    if (isPressed || isPaused) {
       // Freeze: keep advancing lastFlipTime so resume is seamless.
       lastFlipTime = now - (cardX === 0 ? 0 : (() => {
         const startX = direction === 1 ? -cardWidth : trackWidth;
@@ -98,8 +99,13 @@
 
     if (isHit) {
       flashState = 'hit';
+      // Snap the card precisely to centre so it sits perfectly inside frame
+      cardX = trackCenter - cardWidth / 2;
+
       if (!pointsEarned) {
+        // First successful catch — pause the game and show reward
         pointsEarned = true;
+        isPaused = true;
         setTimeout(() => { showRewardPopup = true; }, 220);
       }
     } else {
@@ -109,13 +115,21 @@
 
   function handlePressStart(e: Event) {
     e.preventDefault();
-    if (isPressed) return;
+    if (isPressed || isPaused) return;
     isPressed = true;
     evaluateAttempt();
   }
 
   function handlePressEnd() {
     if (!isPressed) return;
+    isPressed = false;
+    // Keep flash state on if we just earned points (paused state takes over)
+    if (!isPaused) flashState = 'idle';
+  }
+
+  // Resume the game from the paused state (after the first catch)
+  function continuePlaying() {
+    isPaused = false;
     isPressed = false;
     flashState = 'idle';
   }
@@ -202,25 +216,45 @@
         <img src="{base}/tc.svg" alt="" draggable="false" />
       </div>
 
+      <!-- Green glow halo behind the frame on success -->
+      {#if isPaused}
+        <div class="frame-halo" aria-hidden="true" in:fade={{ duration: 280 }}></div>
+      {/if}
+
       <!-- Fixed centered frame on top -->
       <div
         class="game-frame"
-        class:flash-hit={flashState === 'hit'}
         class:flash-miss={flashState === 'miss'}
         bind:this={frameEl}
         aria-hidden="true"
-      ></div>
+      >
+        <img
+          src="{base}/{isPaused ? 'tc-frame-success.svg' : flashState === 'hit' ? 'tc-frame-hit.svg' : flashState === 'miss' ? 'tc-frame-miss.svg' : 'tc-frame.svg'}"
+          alt=""
+          draggable="false"
+        />
+      </div>
     </button>
 
-    <!-- Pill CTA hint -->
-    <div class="game-pill">Press &amp; hold to catch the card</div>
+    <!-- Pill CTA — turns into "Continue playing" button after first catch -->
+    {#if isPaused}
+      <button class="game-pill game-pill-action" onclick={continuePlaying}>
+        Continue playing
+      </button>
+    {:else}
+      <div class="game-pill">Press &amp; hold to catch the card</div>
+    {/if}
 
     <!-- Caption + coin chip -->
     <div class="game-caption-wrap">
       <p class="game-caption">While you wait, catch the card in the frame and earn</p>
       <div class="coin-chip">
         <img src="{base}/coin.svg" alt="" class="coin-chip-icon" draggable="false" />
-        <span class="coin-chip-text"><strong>10</strong> points</span>
+        {#if pointsEarned}
+          <span class="coin-chip-text"><span class="coin-prefix">You earned</span> <strong>10</strong> points</span>
+        {:else}
+          <span class="coin-chip-text"><strong>10</strong> points</span>
+        {/if}
       </div>
     </div>
   </div>
@@ -323,44 +357,33 @@
     touch-action: none;
   }
 
-  /* Fixed centered frame — the catch zone (216×136 tilted -74.29°) */
+  /* Fixed centered frame — uses tc-frame.svg (same silhouette as card) */
   .game-frame {
     position: absolute;
     top: 50%;
     left: 50%;
-    /* card image is 60% of track width with bounding box 190:245 */
-    /* tilted rectangle is 216×136, so frame width = 60% × 216/190 = 68.21% */
-    width: 68.21%;
-    aspect-ratio: 216 / 136;
-    transform: translate(-50%, -50%) rotate(-74.29deg);
-    border-radius: 7.67px;
-    border: 1px solid #D1D5DB;
-    background: transparent;
+    width: 60%;
+    aspect-ratio: 190 / 245;
+    transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 2;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   }
 
-  .game-frame.flash-hit {
-    border-color: #16A34A;
-    border-width: 2px;
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.22);
-    background: rgba(240, 253, 244, 0.5);
+  .game-frame img {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .game-frame.flash-miss {
-    border-color: #DC2626;
-    border-width: 2px;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.20);
-    background: rgba(254, 242, 242, 0.5);
     animation: shake 0.32s cubic-bezier(.36,.07,.19,.97);
   }
 
   @keyframes shake {
-    10%, 90% { transform: translate(calc(-50% - 2px), -50%) rotate(-74.29deg); }
-    20%, 80% { transform: translate(calc(-50% + 3px), -50%) rotate(-74.29deg); }
-    30%, 50%, 70% { transform: translate(calc(-50% - 5px), -50%) rotate(-74.29deg); }
-    40%, 60% { transform: translate(calc(-50% + 5px), -50%) rotate(-74.29deg); }
+    10%, 90% { transform: translate(calc(-50% - 2px), -50%); }
+    20%, 80% { transform: translate(calc(-50% + 3px), -50%); }
+    30%, 50%, 70% { transform: translate(calc(-50% - 5px), -50%); }
+    40%, 60% { transform: translate(calc(-50% + 5px), -50%); }
   }
 
   /* Sliding card — same size as frame, travels across the track */
@@ -381,7 +404,7 @@
     height: 100%;
     display: block;
     border-radius: 8px;
-    box-shadow: 0 8px 18px rgba(6, 20, 42, 0.18);
+    overflow: hidden;
   }
 
   /* Pill CTA hint below the frame */
