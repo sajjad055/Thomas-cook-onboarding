@@ -183,7 +183,7 @@
           autoplay
           loop
           speed="1"
-          style="width: 64px; height: 64px;"
+          style="width: 77px; height: 77px;"
         ></dotlottie-wc>
       </div>
     {:else}
@@ -308,8 +308,8 @@
   }
 
   .lottie-wrap {
-    width: 64px;
-    height: 64px;
+    width: 77px;
+    height: 77px;
     display: flex;
     align-items: center;
     justify-content: center;
