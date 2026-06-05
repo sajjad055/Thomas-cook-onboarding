@@ -34,9 +34,6 @@
 
   onDestroy(() => clearInterval(timerInterval));
 
-  // ── FAQ ─────────────────────────────────────────────
-  let faqOpen = $state(false);
-
   let loading = $state(false);
 
   async function handleGetStarted() {
@@ -136,12 +133,6 @@
 
     </div>
 
-    <!-- FAQ item -->
-    <button class="faq-item" onclick={() => faqOpen = true}>
-      <p class="faq-text">What happens to my money if I don't complete Video KYC?</p>
-      <i class="ph ph-caret-down" style="font-size:24px; color:#6B7280"></i>
-    </button>
-
   </div>
 
   <div class="spacer"></div>
@@ -168,14 +159,6 @@
   </div>
 
 </div>
-
-<!-- ── FAQ BOTTOM SHEET ── -->
-<BottomSheet bind:open={faqOpen} title="What happens to my money if I don't complete Video KYC?">
-  <div class="faq-sheet-content">
-    <p>Your FD amount will be safely refunded to your source account within 5–7 working days if you don't complete Video KYC within the stipulated time.</p>
-    <p>The credit card application will be cancelled and you will need to re-apply if you wish to proceed later.</p>
-  </div>
-</BottomSheet>
 
 <style>
   .screen {
@@ -507,56 +490,6 @@
     width: 0.5px;
     background: #D1D5DB;
     align-self: stretch;
-  }
-
-  /* ── FAQ ── */
-  .faq-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 12px;
-    width: 100%;
-    background: #FFFFFF;
-    border: 1px solid #D1D5DB;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.15s;
-  }
-  .faq-item:active { background: #F9FAFB; }
-
-  .faq-text {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 18px;
-    color: #111827;
-    flex: 1;
-  }
-
-  .faq-answer {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 18px;
-    color: #6B7280;
-  }
-
-  .faq-sheet-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px;
-    background: #FFFCF4;
-    border-radius: 12px;
-  }
-
-  .faq-sheet-content p {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    color: #6B7280;
   }
 
   /* ── Spacer ── */
