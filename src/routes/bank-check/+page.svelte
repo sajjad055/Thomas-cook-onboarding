@@ -58,7 +58,11 @@
   // While pressed, lastFlipTime gets shifted forward each frame so the
   // card stays at exactly its current position when released.
   function animate(now: number) {
-    if (!lastFlipTime) lastFlipTime = now;
+    if (!lastFlipTime) {
+      lastFlipTime = now;
+      // Start off-screen left
+      cardX = -cardWidth;
+    }
 
     if (isPressed || isPaused) {
       // Freeze: keep advancing lastFlipTime so resume is seamless.
@@ -116,6 +120,8 @@
   function handlePressStart(e: Event) {
     e.preventDefault();
     if (isPressed || isPaused) return;
+    // Don't allow taps before game is initialized
+    if (trackWidth === 0 || cardWidth === 0) return;
     isPressed = true;
     evaluateAttempt();
   }
@@ -146,12 +152,17 @@
     }
     lottieReady = true;
 
+    // Wait for layout to settle before measuring — double rAF ensures paint is done
     requestAnimationFrame(() => {
-      if (trackEl) trackWidth = trackEl.clientWidth;
-      if (frameEl) frameWidth = frameEl.clientWidth;
-      if (cardEl) cardWidth = cardEl.clientWidth;
-      rafId = requestAnimationFrame(animate);
+      requestAnimationFrame(() => {
+        measureAndStart();
+      });
     });
+
+    // Also re-measure on resize
+    if (browser) {
+      window.addEventListener('resize', measureAndStart);
+    }
 
     statusTimer = setInterval(() => {
       if (statusIndex < statusMessages.length - 1) statusIndex++;
@@ -162,10 +173,23 @@
     }, 30000);
   });
 
+  function measureAndStart() {
+    if (trackEl) trackWidth = trackEl.clientWidth;
+    if (frameEl) frameWidth = frameEl.clientWidth;
+    if (cardEl) cardWidth = cardEl.clientWidth;
+    // Only start animation if we have real measurements
+    if (trackWidth > 0 && cardWidth > 0 && !rafId) {
+      rafId = requestAnimationFrame(animate);
+    }
+  }
+
   onDestroy(() => {
     if (rafId !== null) cancelAnimationFrame(rafId);
     clearInterval(statusTimer);
     clearTimeout(navTimer);
+    if (browser) {
+      window.removeEventListener('resize', measureAndStart);
+    }
   });
 </script>
 
