@@ -104,6 +104,7 @@
             class:has-value={rawDigits.length > 0}
             maxlength="14"
             autocomplete="off"
+            autofocus
           />
         </div>
       </div>
@@ -339,7 +340,8 @@
     align-items: center;
     justify-content: center;
     width: 260px;
-    z-index: 2;
+    z-index: 10;
+    pointer-events: auto;
   }
 
   .aadhaar-input {
@@ -355,6 +357,9 @@
     letter-spacing: 2px;
     caret-color: #242A80;
     text-align: center;
+    pointer-events: auto;
+    -webkit-user-select: text;
+    user-select: text;
   }
   .aadhaar-input::placeholder {
     color: rgba(33,33,33,0.35);

@@ -78,7 +78,7 @@
 
       <!-- VKYC Banner -->
       <div class="highlight-row">
-        <img src="{base}/vkyc-banner.svg" alt="Video KYC" class="vkyc-banner-img" draggable="false" />
+        <img src="{base}/vkyc-banner-new.svg" alt="Video KYC" class="vkyc-banner-img" draggable="false" />
       </div>
 
       <!-- Sub-heading with divider lines -->
