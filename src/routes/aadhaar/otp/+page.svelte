@@ -31,21 +31,40 @@
     }, 1000);
   }
 
+  let initialHeight = 0;
+
   function handleViewportResize() {
     if (browser && window.visualViewport) {
       const viewport = window.visualViewport;
-      keyboardHeight = window.innerHeight - viewport.height;
+      // On iOS, we need to account for both viewport height change and scroll offset
+      const viewportHeight = viewport.height;
+      const offset = viewport.offsetTop;
+      
+      // Calculate keyboard height - difference from initial window height
+      const calculatedHeight = initialHeight - viewportHeight - offset;
+      keyboardHeight = Math.max(0, calculatedHeight);
     }
   }
 
   onMount(() => {
     startTimer();
-    inputs[0]?.focus();
+    
+    // Store initial height before keyboard appears
+    if (browser) {
+      initialHeight = window.innerHeight;
+    }
+    
+    // Small delay to ensure DOM is ready before focusing
+    setTimeout(() => {
+      inputs[0]?.focus();
+    }, 100);
     
     // Listen for keyboard show/hide via visualViewport
     if (browser && window.visualViewport) {
       window.visualViewport.addEventListener('resize', handleViewportResize);
       window.visualViewport.addEventListener('scroll', handleViewportResize);
+      // Initial check
+      handleViewportResize();
     }
   });
   onDestroy(() => {
