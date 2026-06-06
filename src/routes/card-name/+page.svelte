@@ -157,6 +157,11 @@
 
   </div>
 
+  <!-- Bank Partner Logos -->
+  <div class="partner-logos">
+    <img src="{base}/logos-bank-partner.svg" alt="Bank Partners" class="partner-img" draggable="false" />
+  </div>
+
   <div class="spacer"></div>
 
   <!-- Footer -->
@@ -664,4 +669,18 @@
     transition: opacity 0.15s;
   }
   .btn-secondary-sheet:active { opacity: 0.85; }
+
+  /* Partner logos */
+  .partner-logos {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    flex-shrink: 0;
+  }
+  .partner-img {
+    height: 32px;
+    width: auto;
+    user-select: none;
+    pointer-events: none;
+  }
 </style>

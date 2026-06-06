@@ -124,6 +124,11 @@
 
   </div>
 
+  <!-- Bank Partner Logos -->
+  <div class="partner-logos">
+    <img src="{base}/logos-bank-partner.svg" alt="Bank Partners" class="partner-img" draggable="false" />
+  </div>
+
   <div class="spacer"></div>
 
   <!-- ── FOOTER ── -->
@@ -335,6 +340,17 @@
 
   /* ── Spacer ── */
   .spacer { flex: 1; }
+
+  /* ── Partner Logos ── */
+  .partner-logos {
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 0;
+  }
+  .partner-img {
+    max-width: 100%;
+    height: auto;
+  }
 
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;

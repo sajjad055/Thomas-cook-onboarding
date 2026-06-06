@@ -285,6 +285,11 @@
         {/if}
       </div>
     </div>
+
+    <!-- Bank Partner Logos -->
+    <div class="partner-logos">
+      <img src="{base}/logos-bank-partner.svg" alt="Bank Partners" class="partner-img" draggable="false" />
+    </div>
   </div>
 
   <!-- ── Reward popup ──────────────────────────────────────────── -->
@@ -565,4 +570,18 @@
     transition: opacity 0.15s, transform 0.1s;
   }
   .reward-btn:active { opacity: 0.9; transform: scale(0.98); }
+
+  /* Partner logos */
+  .partner-logos {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    flex-shrink: 0;
+  }
+  .partner-img {
+    height: 32px;
+    width: auto;
+    user-select: none;
+    pointer-events: none;
+  }
 </style>
