@@ -79,7 +79,7 @@
     {#if showCard}
       <div class="card-scene" in:fly={{ y: 40, duration: 500, easing: cubicOut }}>
         <div class="card-wrap">
-          <img src="{base}/tc-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+          <img src="{base}/tc-card-bank.svg" alt="TC Travel Card" class="card-img" draggable="false" />
           <span class="card-name">{selectedName.toUpperCase()}</span>
         </div>
         <div class="card-shadow-wrap">
@@ -311,11 +311,11 @@
   /* Name overlay on card — aligned near RuPay at bottom-left of the visible card */
   .card-name {
     position: absolute;
-    left: 97px;
-    top: 160px;
+    left: 101px;
+    top: 142.5px;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 700;
-    font-size: 9px;
+    font-size: 7px;
     line-height: 1.32;
     letter-spacing: 0.15em;
     color: rgba(255,255,255,0.9);

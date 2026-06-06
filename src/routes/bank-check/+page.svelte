@@ -237,7 +237,7 @@
     >
       <!-- Sliding card travels behind the frame across the full track -->
       <div class="game-card" bind:this={cardEl} style="transform: translateX({cardX}px);">
-        <img src="{base}/tc.svg" alt="" draggable="false" />
+        <img src="{base}/tc-game.svg" alt="" draggable="false" />
       </div>
 
       <!-- Green glow halo behind the frame on success -->

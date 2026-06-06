@@ -4,12 +4,14 @@
   import { fade } from 'svelte/transition';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import { onMount, onDestroy } from 'svelte';
+  import { browser } from '$app/environment';
 
   // 6 OTP boxes
   let otp = $state(['', '', '', '', '', '']);
   let inputs: HTMLInputElement[] = $state([]);
   let loading = $state(false);
   let error = $state('');
+  let keyboardHeight = $state(0);
 
   // Resend timer — 30s
   let resendSeconds = $state(30);
@@ -29,11 +31,30 @@
     }, 1000);
   }
 
+  function handleViewportResize() {
+    if (browser && window.visualViewport) {
+      const viewport = window.visualViewport;
+      keyboardHeight = window.innerHeight - viewport.height;
+    }
+  }
+
   onMount(() => {
     startTimer();
     inputs[0]?.focus();
+    
+    // Listen for keyboard show/hide via visualViewport
+    if (browser && window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportResize);
+      window.visualViewport.addEventListener('scroll', handleViewportResize);
+    }
   });
-  onDestroy(() => clearInterval(timerInterval));
+  onDestroy(() => {
+    clearInterval(timerInterval);
+    if (browser && window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', handleViewportResize);
+      window.visualViewport.removeEventListener('scroll', handleViewportResize);
+    }
+  });
 
   let isComplete = $derived(otp.every(d => d !== ''));
 
@@ -159,7 +180,7 @@
   <div class="spacer"></div>
 
   <!-- ── FOOTER  pt:20px pb:20px ── -->
-  <div class="footer">
+  <div class="footer" style="bottom: {keyboardHeight}px;">
     <button
       class="btn-primary"
       disabled={!isComplete || loading}
@@ -354,10 +375,18 @@
   .spacer { flex: 1; }
 
   /* ── Footer  pt:20px pb:20px  px:16px ── */
-  .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    padding: 20px 16px calc(40px + env(safe-area-inset-bottom));
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     background: #FFFCF4;
     flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  /* When keyboard is open, move footer up above keyboard */
+  @supports (bottom: env(keyboard-inset-height)) {
+    .footer {
+      bottom: env(keyboard-inset-height, 0);
+    }
   }
 
   .btn-primary {

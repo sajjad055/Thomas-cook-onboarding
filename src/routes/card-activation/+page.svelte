@@ -72,7 +72,7 @@
   <div class="bg-card-group" class:centered={phase === 'intro'} class:settled={phase === 'reveal'}>
     <img src="{base}/bg-lighting.svg" alt="" class="bg-lighting" draggable="false" aria-hidden="true" />
     <div class="card-float-wrap">
-      <img src="{base}/tc-card.svg" alt="TC Travel Card" class="card-img" draggable="false" />
+    <img src="{base}/tc-card-bank.svg" alt="TC Travel Card" class="card-img" draggable="false" />
       <span class="card-name-overlay">SAJJAD S</span>
     </div>
     <div class="card-shadow-element"></div>
@@ -276,11 +276,11 @@
 
   .card-name-overlay {
     position: absolute;
-    left: 97px;
-    top: 160px;
+    left: 101px;
+    top: 142.5px;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 700;
-    font-size: 9px;
+    font-size: 7px;
     line-height: 1.32;
     letter-spacing: 0.15em;
     color: rgba(255,255,255,0.9);
@@ -295,8 +295,8 @@
     width: 160px;
     height: 10px;
     border-radius: 50%;
-    background: rgba(0, 48, 129, 0.3);
-    filter: blur(4px);
+    background: rgba(0, 48, 129, 0.25);
+    filter: blur(3px);
     margin: 16px auto 0;
     animation: shadowScale 3.5s ease-in-out infinite;
     position: relative;
