@@ -58,7 +58,7 @@
   ]);
 
   let loading = $state(false);
-  let agreed = $state(false);
+  let aaAgreed = $state(false);
   let allValid = $derived(steps.every(s => s.value !== ''));
 
   function handleStepChange(stepIndex: number, value: string) {
@@ -75,6 +75,71 @@
   let canResend = $state(false);
   let timerInterval: ReturnType<typeof setInterval>;
 
+  // Verification method choice sheet
+  let showMethodSheet = $state(false);
+  let selectedMethod = $state<'aggregator' | 'upload' | null>(null);
+
+  // Upload sheet
+  let showUploadSheet = $state(false);
+  let uploadedFiles = $state<File[]>([]);
+  let uploadLoading = $state(false);
+  let fileInput: HTMLInputElement;
+
+  function openMethodSheet() {
+    if (!allValid) return;
+    selectedMethod = 'aggregator'; // Default to AA
+    aaAgreed = false;
+    showMethodSheet = true;
+  }
+
+  function handleMethodContinue() {
+    if (!selectedMethod) return;
+    
+    if (selectedMethod === 'aggregator') {
+      if (!aaAgreed) return; // Need consent for AA
+      showMethodSheet = false;
+      // Proceed with OTP flow
+      otp = ['', '', '', '', '', ''];
+      otpError = '';
+      showOtpSheet = true;
+      startTimer();
+      setTimeout(() => otpInputs[0]?.focus(), 300);
+    } else {
+      // Open upload sheet (no consent needed)
+      showMethodSheet = false;
+      uploadedFiles = [];
+      showUploadSheet = true;
+    }
+  }
+
+  function handleFileSelect(e: Event) {
+    const input = e.target as HTMLInputElement;
+    if (input.files) {
+      const newFiles = Array.from(input.files);
+      uploadedFiles = [...uploadedFiles, ...newFiles].slice(0, 3); // Max 3 files
+    }
+    input.value = ''; // Reset so same file can be selected again
+  }
+
+  function removeFile(index: number) {
+    uploadedFiles = uploadedFiles.filter((_, i) => i !== index);
+  }
+
+  function formatFileSize(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  async function handleUploadSubmit() {
+    if (uploadedFiles.length === 0) return;
+    uploadLoading = true;
+    await new Promise(r => setTimeout(r, 1500));
+    uploadLoading = false;
+    showUploadSheet = false;
+    goto(`${base}/bank-check`);
+  }
+
   function startTimer() {
     resendSeconds = 30;
     canResend = false;
@@ -89,7 +154,7 @@
   }
 
   function openOtpSheet() {
-    if (!allValid || !agreed) return;
+    if (!allValid) return;
     otp = ['', '', '', '', '', ''];
     otpError = '';
     showOtpSheet = true;
@@ -172,7 +237,7 @@
   onDestroy(() => clearInterval(timerInterval));
 
   async function handleSubmit() {
-    openOtpSheet();
+    openMethodSheet();
   }
 </script>
 
@@ -217,34 +282,15 @@
 
   <!-- ── FOOTER ── -->
   <div class="footer">
-    <!-- Consent -->
-    <div class="consent-row">
-      <button class="checkbox" class:checked={agreed} onclick={() => agreed = !agreed} aria-label="Agree to terms">
-        {#if agreed}
-          <div class="check-anim">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <rect width="18" height="18" rx="4" fill="#184595"/>
-              <path d="M5.5 9.2L7.8 11.6L12.5 6.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        {:else}
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" stroke="#D1D5DB"/>
-          </svg>
-        {/if}
-      </button>
-      <p class="consent-text">I agree to IOB Bank to verify my income details through my bank account.</p>
-    </div>
-
     <button
       class="btn-primary"
-      disabled={!allValid || !agreed || loading}
+      disabled={!allValid || loading}
       onclick={handleSubmit}
     >
       {#if loading}
         <span class="spinner"></span>
       {:else}
-        Confirm with OTP
+        Continue
       {/if}
     </button>
   </div>
@@ -399,6 +445,154 @@
         <span class="spinner"></span>
       {:else}
         Continue
+      {/if}
+    </button>
+  {/snippet}
+</BottomSheet>
+
+<!-- Verification Method Choice Sheet -->
+<BottomSheet bind:open={showMethodSheet} title="Select a method to verify your income">
+  <div class="method-sheet-content">
+    <div class="method-options">
+      <!-- Account Aggregator Option (Recommended) -->
+      <button
+        class="method-option"
+        class:method-selected={selectedMethod === 'aggregator'}
+        onclick={() => selectedMethod = 'aggregator'}
+      >
+        <div class="method-option-left">
+          <div class="radio" class:checked={selectedMethod === 'aggregator'}>
+            {#if selectedMethod === 'aggregator'}
+              <div class="check-anim">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="10" fill="#15803D"/>
+                  <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            {/if}
+          </div>
+          <div class="method-info">
+            <div class="method-title-row">
+              <span class="method-title">Account Aggregator</span>
+              <span class="method-tag">Recommended</span>
+            </div>
+            <p class="method-desc">Securely fetch your bank statements instantly via RBI-licensed aggregator</p>
+          </div>
+        </div>
+      </button>
+
+      <!-- Upload Statement Option -->
+      <button
+        class="method-option"
+        class:method-selected={selectedMethod === 'upload'}
+        onclick={() => selectedMethod = 'upload'}
+      >
+        <div class="method-option-left">
+          <div class="radio" class:checked={selectedMethod === 'upload'}>
+            {#if selectedMethod === 'upload'}
+              <div class="check-anim">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="10" fill="#15803D"/>
+                  <path d="M6.5 10.2L9 12.8L13.5 7.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            {/if}
+          </div>
+          <div class="method-info">
+            <span class="method-title">Upload bank statement</span>
+            <p class="method-desc">Upload your last 3 months bank statement (PDF format)</p>
+          </div>
+        </div>
+        <i class="ph ph-upload-simple" style="font-size:24px; color:#111827"></i>
+      </button>
+    </div>
+  </div>
+
+  {#snippet footer()}
+    <!-- AA Consent (only shown when Account Aggregator is selected) -->
+    {#if selectedMethod === 'aggregator'}
+      <div class="method-consent-row">
+        <button class="checkbox" class:checked={aaAgreed} onclick={() => aaAgreed = !aaAgreed} aria-label="Agree to AA terms">
+          {#if aaAgreed}
+            <div class="check-anim">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <rect width="18" height="18" rx="4" fill="#184595"/>
+                <path d="M5.5 9.2L7.8 11.6L12.5 6.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {:else}
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" stroke="#D1D5DB"/>
+            </svg>
+          {/if}
+        </button>
+        <p class="method-consent-text">I authorize IOB Bank to verify my income details via a secure RBI-licensed Account Aggregator.</p>
+      </div>
+    {/if}
+    <button
+      class="method-continue-btn"
+      disabled={!selectedMethod || (selectedMethod === 'aggregator' && !aaAgreed)}
+      onclick={handleMethodContinue}
+    >
+      {selectedMethod === 'aggregator' ? 'Confirm with OTP' : 'Continue'}
+    </button>
+  {/snippet}
+</BottomSheet>
+
+<!-- Upload Statement Sheet -->
+<BottomSheet bind:open={showUploadSheet} title="Upload bank statement">
+  <div class="upload-sheet-content">
+    <p class="upload-subtitle">Upload your last 3 months bank statement in PDF format</p>
+
+    <!-- Upload Area -->
+    <input
+      type="file"
+      accept=".pdf"
+      multiple
+      bind:this={fileInput}
+      onchange={handleFileSelect}
+      class="file-input-hidden"
+    />
+    
+    <button class="upload-area" onclick={() => fileInput?.click()}>
+      <div class="upload-icon-wrap">
+        <i class="ph ph-cloud-arrow-up" style="font-size:32px; color:#184595"></i>
+      </div>
+      <p class="upload-area-text">Tap to upload PDF</p>
+      <p class="upload-area-hint">Maximum 3 files, 10MB each</p>
+    </button>
+
+    <!-- Uploaded Files List -->
+    {#if uploadedFiles.length > 0}
+      <div class="uploaded-files">
+        {#each uploadedFiles as file, i}
+          <div class="uploaded-file-item">
+            <div class="file-icon">
+              <i class="ph ph-file-pdf" style="font-size:24px; color:#DC2626"></i>
+            </div>
+            <div class="file-info">
+              <p class="file-name">{file.name}</p>
+              <p class="file-size">{formatFileSize(file.size)}</p>
+            </div>
+            <button class="file-remove" onclick={() => removeFile(i)} aria-label="Remove file">
+              <i class="ph ph-x" style="font-size:18px; color:#6B7280"></i>
+            </button>
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </div>
+
+  {#snippet footer()}
+    <button
+      class="upload-submit-btn"
+      disabled={uploadedFiles.length === 0 || uploadLoading}
+      onclick={handleUploadSubmit}
+    >
+      {#if uploadLoading}
+        <span class="spinner"></span>
+      {:else}
+        Submit documents
       {/if}
     </button>
   {/snippet}
@@ -604,8 +798,9 @@
     padding: 40px 16px 0;
   }
   .partner-img {
-    max-width: 100%;
-    height: auto;
+    height: 38px;
+    filter: grayscale(100%);
+    width: auto;
   }
 
   /* ── Footer ── */
@@ -993,4 +1188,294 @@
   }
   .bank-confirm-btn:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
   .bank-confirm-btn:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
+
+  /* ── Method Choice Sheet ── */
+  .method-sheet-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .method-subtitle {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #6B7280;
+    line-height: 1.5;
+    margin-top: -20px;
+    margin-bottom: 8px;
+  }
+
+  .method-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .method-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .method-option:active { background: #F9FAFB; }
+  .method-selected {
+    border-color: #184595;
+    background: #F0F4FF;
+  }
+
+  .method-option-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .method-option .radio {
+    margin-top: 2px;
+  }
+
+  .method-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .method-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .method-title {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #111827;
+  }
+
+  .method-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: #F0FDF4;
+    border-radius: 4px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #15803D;
+  }
+
+  .method-desc {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6B7280;
+  }
+
+  .method-continue-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: #184595;
+    color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .method-continue-btn:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
+  .method-continue-btn:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
+
+  /* AA Consent in Method Sheet */
+  .method-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .method-consent-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6B7280;
+    flex: 1;
+  }
+
+  /* ── Upload Sheet ── */
+  .upload-sheet-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .upload-subtitle {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #6B7280;
+    line-height: 1.5;
+    margin-top: -20px;
+    margin-bottom: 8px;
+  }
+
+  .file-input-hidden {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 24px;
+    background: #FFFFFF;
+    border: 2px dashed #D1D5DB;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .upload-area:active {
+    background: #F9FAFB;
+    border-color: #184595;
+  }
+
+  .upload-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #F0F4FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-area-text {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  .upload-area-hint {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #6B7280;
+  }
+
+  .uploaded-files {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .uploaded-file-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+  }
+
+  .file-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #FEF2F2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .file-name {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #111827;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-size {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #6B7280;
+  }
+
+  .file-remove {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .file-remove:active { background: #F3F4F6; }
+
+  .upload-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: #184595;
+    color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .upload-submit-btn:active:not(:disabled) { opacity: 0.88; transform: scale(0.99); }
+  .upload-submit-btn:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
 </style>

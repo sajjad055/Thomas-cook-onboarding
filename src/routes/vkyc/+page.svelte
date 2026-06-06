@@ -256,13 +256,11 @@
 
   .vkyc-banner-img {
     width: 100%;
-    height: auto;
     display: block;
   }
 
   .vkyc-illustration {
     width: 102px;
-    height: auto;
     flex-shrink: 0;
     user-select: none;
     pointer-events: none;
@@ -508,8 +506,9 @@
     padding: 40px 16px 0;
   }
   .partner-img {
-    max-width: 100%;
-    height: auto;
+    height: 38px;
+    filter: grayscale(100%);
+    width: auto;
   }
 
   /* ── Footer ── */

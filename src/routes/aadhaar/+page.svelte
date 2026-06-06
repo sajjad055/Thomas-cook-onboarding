@@ -324,7 +324,6 @@
   .kyc-bg {
     display: block;
     width: 100%;
-    height: auto;
     object-fit: contain;
     user-select: none;
     pointer-events: none;
@@ -391,8 +390,9 @@
     padding: 40px 16px 0;
   }
   .partner-img {
-    max-width: 100%;
-    height: auto;
+    height: 38px;
+    filter: grayscale(100%);
+    width: auto;
   }
 
   /* ── Footer ── */

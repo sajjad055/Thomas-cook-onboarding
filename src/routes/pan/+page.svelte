@@ -5,6 +5,7 @@
   import StatusBar from '$lib/components/StatusBar.svelte';
   import TextField from '$lib/components/TextField.svelte';
   import ToastMessage from '$lib/components/ToastMessage.svelte';
+  import BottomSheet from '$lib/components/BottomSheet.svelte';
 
   let pan = $state('');
   let dob = $state('17/08/1999');
@@ -13,6 +14,7 @@
   let loading = $state(false);
   let panTouched = $state(false);
   let showToast = $state(false);
+  let showConsentSheet = $state(false);
 
   onMount(() => {
     showToast = true;
@@ -139,8 +141,8 @@
       </button>
       <div class="consent-text-wrap">
         <p class="consent-body">
-          I hereby authorize IOB Bank (India) Ltd. ("Bank") to fetch/retrieve my Know Your Customer..
-          <button class="read-more" onclick={() => {}}>Read more</button>
+          I hereby authorize IOB Bank (India) Ltd. to fetch/retrieve my Know Your Customer (KYC) details and CIBIL/Credit score..
+          <button class="read-more" onclick={() => showConsentSheet = true}>Read more</button>
         </p>
       </div>
     </div>
@@ -157,6 +159,28 @@
   </div>
 
 </div>
+
+<!-- PAN Consent Bottom Sheet -->
+<BottomSheet bind:open={showConsentSheet} title="PAN consent">
+  <div class="consent-sheet-frame">
+    <div class="consent-sheet-body">
+      <p>I hereby authorize IOB Bank (India) Ltd. to:</p>
+      <ul>
+        <li>Fetch and verify my Know Your Customer (KYC) details from UIDAI and other government databases using my PAN and Aadhaar information.</li>
+        <li>Access my CIBIL/Credit score and credit history from TransUnion CIBIL Limited and other credit bureaus for the purpose of evaluating my credit card application.</li>
+        <li>Share my personal and financial information with Thomas Cook (co-brand partner) for card issuance and servicing purposes.</li>
+        <li>Store and process this information in accordance with applicable data protection regulations.</li>
+      </ul>
+      <p>I understand that this consent is required for the processing of my TC Travel Card application and that my credit score inquiry will be recorded as a "soft pull" which does not impact my credit score.</p>
+    </div>
+  </div>
+
+  {#snippet footer()}
+    <button class="btn-primary-sheet" onclick={() => { agreed = true; showConsentSheet = false; }}>
+      I agree
+    </button>
+  {/snippet}
+</BottomSheet>
 
 <style>
   .screen {
@@ -233,8 +257,9 @@
     padding: 40px 16px 0;
   }
   .partner-img {
-    max-width: 100%;
-    height: auto;
+    height: 38px;
+    filter: grayscale(100%);
+    width: auto;
   }
 
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto; display: flex; flex-direction: column; gap: 16px; padding: 20px 0 24px; flex-shrink: 0; }
@@ -261,4 +286,45 @@
   .btn-primary:disabled { background: #D1D5DB; box-shadow: none; cursor: not-allowed; }
   .spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #FFFFFF; border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Consent Bottom Sheet */
+  .consent-sheet-frame {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .consent-sheet-body {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
+  }
+  .consent-sheet-body p {
+    margin-bottom: 12px;
+  }
+  .consent-sheet-body ul {
+    margin: 0 0 16px 0;
+    padding-left: 20px;
+  }
+  .consent-sheet-body li {
+    margin-bottom: 8px;
+  }
+  .btn-primary-sheet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: #184595;
+    color: #FFFFFF;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 0px #06142A;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-primary-sheet:active { opacity: 0.88; transform: scale(0.99); }
 </style>
