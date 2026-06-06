@@ -232,7 +232,7 @@
   .card-section {
     position: relative;
     width: 100%;
-    height: 355px;
+    height: clamp(280px, 45vh, 355px);
     flex-shrink: 0;
     overflow: visible;
   }
@@ -557,7 +557,7 @@
 
   /* ── Footer ── */
   .footer { position: sticky; bottom: 0; z-index: 5; margin-top: auto;
-    padding: 16px 16px calc(40px + env(safe-area-inset-bottom));
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
     background: #FFFCF4;
     flex-shrink: 0;
   }
@@ -674,7 +674,7 @@
   .partner-logos {
     display: flex;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 24px;
     flex-shrink: 0;
   }
   .partner-img {
