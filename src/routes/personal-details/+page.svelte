@@ -394,7 +394,7 @@
     padding: 40px 16px 0;
   }
   .partner-img {
-    height: 38px;
+    height: 46px;
     filter: grayscale(100%);
     width: auto;
   }
