@@ -678,7 +678,8 @@
     flex-shrink: 0;
   }
   .partner-img {
-    height: 32px;
+    height: 38px;
+    filter: grayscale(100%);
     width: auto;
     user-select: none;
     pointer-events: none;
