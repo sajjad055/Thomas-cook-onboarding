@@ -168,7 +168,7 @@
           <!-- Processing badge -->
           <ShimmerText trigger={true} loop={true} duration={2000}>
             <div class="processing-badge">
-              <span class="processing-text">Processing typically requires upto 48 hours</span>
+              <span class="processing-text">Card will be processed shortly</span>
             </div>
           </ShimmerText>
 
